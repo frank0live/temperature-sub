@@ -1,0 +1,5949 @@
+<!DOCTYPE html>
+<html>
+<head>
+                <style>*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+:root {
+  color-scheme: dark;
+  --font-sans: 'Vazirmatn', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --font-display: 'Vazirmatn', system-ui, sans-serif;
+  --bg-soft: #1b262c;
+  --surface: #1b262c;
+  --surface-strong: rgba(33,39,51,0.06);
+  --surface-muted: rgba(96,165,250,0.07);
+  --border: rgba(22,111,222,0.1);
+  --border-strong: rgba(96, 165, 250, 0.34);
+  --text-primary: #eef2f8;
+  --text-secondary: #a3aec0;
+  --text-muted: #727d90;
+  --accent: #4f9bff;
+  --accent-strong: #2563eb;
+  --accent-bright: #7cb6ff;
+  --accent-soft: rgba(79, 155, 255, 0.13);
+  --success: #4ea36a;
+  --danger: #d9544a;
+  --shadow-sm: 5px 10px 24px rgba(0, 0, 0, 0.28);
+  --shadow-lg: 0 18px 48px rgba(0, 0, 0, 0.32);
+  --radius-sm: 1rem;
+  --radius-md: 1.35rem;
+  --radius-lg: 1.7rem;
+  --radius-xl: 2.1rem;
+  --space-1: 0.35rem;
+  --space-2: 0.6rem;
+  --space-3: 0.9rem;
+  --space-4: 1.2rem;
+  --space-5: 1.55rem;
+  --ring-focus: rgba(79, 155, 255, 0.747);
+  --ring-size: clamp(88px, min(40vw, 22svh, 22vh), 196px);
+  --chart-h: clamp(96px, 22vw, 150px);
+  --status-active-bg: rgba(78, 163, 106, 0.15);
+  --status-active-border: rgba(78, 163, 106, 0.55);
+  --status-active-text: #6fce8e;
+  --status-inactive-bg: rgba(217, 84, 74, 0.15);
+  --status-inactive-border: rgba(230, 89, 78, 0.849);
+  --status-inactive-text: #f0938a;
+  --bg: #161a22;
+}
+
+html[data-theme="light"] {
+  color-scheme: light;
+  --bg: #f6f8fb;
+  --bg-soft: #f6f8fb;
+  --surface: rgba(255, 255, 255, 0.82);
+  --surface-strong: rgba(255, 255, 255, 0.96);
+  --surface-muted: rgba(37, 99, 235, 0.05);
+  --border: rgba(30, 50, 90, 0.14);
+  --border-strong: rgba(37, 99, 235, 0.30);
+  --text-primary: #1a2230;
+  --text-secondary: #52607a;
+  --text-muted: #7c87a0;
+  --accent: #2f6fe0;
+  --accent-strong: #1d4ed8;
+  --accent-bright: #4f8bef;
+  --accent-soft: rgba(47, 111, 224, 0.10);
+  --shadow-sm: 0 12px 30px rgba(30, 50, 90, 0.10);
+  --shadow-lg: 0 30px 70px rgba(30, 50, 90, 0.16);
+  --ring-focus: rgba(47, 111, 224, 0.5);
+  --status-active-text: #2f8a4f;
+  --status-inactive-text: #c0392b;
+}
+
+html {
+  min-height: 100vh;
+  min-height: 100dvh;
+  height: 100%;
+  -webkit-text-size-adjust: 100%;
+  text-rendering: optimizeLegibility;
+  overflow: hidden;
+  background-color: var(--bg-soft);
+}
+
+body {
+  min-height: 100vh;
+  min-height: 100dvh;
+  height: 100%;
+  overflow: hidden;
+  font-family: var(--font-sans);
+  color: var(--text-primary);
+  line-height: 1.6;
+  background-attachment: fixed;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+  background: radial-gradient(circle at 16% 10%, rgba(49,124,211,0.17), transparent 34rem), radial-gradient(circle at 86% 90%, rgba(15,122,220,0.12), transparent 36rem), linear-gradient(160deg, var(--bg), var(--bg-soft));
+  background-attachment: fixed;
+}
+
+body.pwa-mode .app-shell {
+  width: 100vw;
+  max-width: 100vw;
+  height: var(--real-vh, 100dvh);
+  margin: 0;
+  padding: max(0.8rem, env(safe-area-inset-top)) max(0.8rem, env(safe-area-inset-right)) max(0.9rem, env(safe-area-inset-bottom)) max(0.8rem, env(safe-area-inset-left));
+  gap: 0.85rem;
+}
+
+body.pwa-mode .app-header {
+  border-radius: var(--radius-lg);
+}
+
+.chart-svg-wrap, .sparkline-svg, .chart-tooltip {
+  touch-action: manipulation;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+}
+
+button, a {
+  font: inherit;
+  color: inherit;
+  text-decoration: none;
+}
+
+button:focus-visible, a:focus-visible {
+  outline: 2px solid var(--ring-focus);
+  outline-offset: 3px;
+}
+
+.scroll-hidden {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.scroll-hidden::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+}
+
+.scroll-blue {
+  scrollbar-width: thin;
+  scrollbar-color: var(--accent) transparent;
+}
+
+.scroll-blue::-webkit-scrollbar {
+  width: 0.3rem;
+}
+
+.scroll-blue::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.scroll-blue::-webkit-scrollbar-thumb {
+  background: var(--accent);
+  border-radius: 999px;
+}
+
+/* ==================== APP SHELL ==================== */
+
+.app-shell {
+  height: 100dvh;
+  width: min(100%, 787px);
+  margin-inline: auto;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr) auto;
+  padding: clamp(0.7rem, 2vw, 1.4rem);
+  padding-bottom: max(clamp(0.7rem, 2vw, 1.4rem), env(safe-area-inset-bottom));
+  gap: clamp(0.65rem, 1.6vw, 1.1rem);
+}
+
+/* ==================== HEADER ==================== */
+
+.app-header {
+  border-radius: var(--radius-xl);
+  padding: clamp(0.65rem, 1.6vw, 1rem) clamp(0.85rem, 2vw, 1.35rem);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-width: 0;
+}
+
+.brand-mark {
+  width: 2.9rem;
+  height: 2.9rem;
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  border-radius: var(--radius-sm);
+  font-size: 1.25rem;
+  color: #fff;
+}
+
+.brand-text {
+  min-width: 0;
+}
+
+.brand-text h1 {
+  font-size: clamp(1.02rem, 2.4vw, 1.35rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.brand-sub {
+  margin-top: 0.1rem;
+  font-size: 0.72rem;
+  color: var(--accent);
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  overflow: visible !important;
+}
+
+.icon-btn {
+  width: 2.7rem;
+  height: 2.7rem;
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface-muted);
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: transform 160ms ease, border-color 160ms ease, background 160ms ease, color 160ms ease;
+}
+
+.icon-btn:hover {
+  transform: translateY(-2px);
+  border-color: var(--border-strong);
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+.icon-btn:active {
+  transform: scale(0.94);
+}
+
+/* ==================== VIEW STAGE ==================== */
+
+.stage {
+  position: relative;
+  min-height: 0;
+}
+
+.view {
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translateY(14px) scale(0.99);
+  transition: opacity 300ms ease, transform 300ms ease, visibility 300ms;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  display: flex;
+  flex-direction: column;
+  gap: clamp(0.65rem, 1.6vw, 1rem);
+  padding: 2px;
+}
+
+.view.active {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: translateY(0) scale(1);
+}
+
+.view > * {
+  flex-shrink: 0;
+}
+
+.panel {
+  border-radius: var(--radius-xl);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+}
+
+.panel-pad {
+  padding: clamp(0.95rem, 2.2vw, 1.4rem);
+}
+
+.view-heading {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.view-heading i {
+  color: var(--accent);
+  font-size: 1.05rem;
+}
+
+.view-heading strong {
+  font-size: 1.02rem;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+}
+
+/* ==================== HOME VIEW ==================== */
+
+.hero {
+  flex: 1 1 auto;
+  border-radius: var(--radius-xl);
+  padding: clamp(0.55rem, 1.9svh, 1.9rem);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: clamp(0.28rem, 1.5svh, 1.2rem);
+  text-align: center;
+  background: radial-gradient(circle at 80% 12%, var(--accent-soft), transparent 60%), var(--surface);
+  border: 1px solid var(--border);
+  backdrop-filter: blur(22px);
+  -webkit-backdrop-filter: blur(22px);
+}
+
+.hero > * {
+  flex-shrink: 1;
+  min-height: 0;
+}
+
+.hero > :first-child {
+  margin-top: auto;
+}
+
+.hero > :last-child {
+  margin-bottom: auto;
+}
+
+.hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(115deg, transparent 55%, rgba(79,155,255,0.06) 100%);
+  pointer-events: none;
+}
+
+.premium-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: clamp(0.16rem, 0.5svh, 0.3rem) clamp(0.6rem, 1.5vw, 0.85rem);
+  border-radius: 999px;
+  font-size: clamp(0.58rem, min(1.8vw, 1.3svh), 0.72rem);
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--accent-bright);
+  background: var(--accent-soft);
+  border: 1px solid var(--border-strong);
+}
+
+.hero-greeting {
+  color: var(--text-secondary);
+  font-size: clamp(0.72rem, min(2vw, 1.9svh), 1rem);
+  font-weight: 600;
+}
+
+.hero-title {
+  font-family: var(--font-display);
+  font-size: clamp(1.05rem, min(5.5vw, 3.6svh), 2.4rem);
+  font-weight: 800;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  background: linear-gradient(120deg, var(--text-primary), var(--accent));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.hero-email {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.82rem;
+  color: var(--text-secondary);
+  direction: ltr;
+  word-break: break-all;
+}
+
+.hero-email:empty {
+  display: none;
+}
+
+/* ==================== USAGE RING (liquid) ==================== */
+
+.usage-ring-liquid {
+  position: relative;
+  width: var(--ring-size);
+  height: var(--ring-size);
+  min-width: var(--ring-size);
+  min-height: var(--ring-size);
+  max-width: var(--ring-size);
+  max-height: var(--ring-size);
+  flex: 0 0 auto;
+  border-radius: 50%;
+  overflow: hidden;
+  margin: 0.2rem 0;
+}
+
+#liquidBubbleCanvas {
+  position: absolute;
+  inset: 0;
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  z-index: 1;
+  touch-action: none;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+}
+
+.ring-percent {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-content: center;
+  text-align: center;
+  font-weight: 900;
+  z-index: 10;
+  pointer-events: none;
+}
+
+#ringPercentText {
+  font-size: clamp(1.5rem, 6vw, 2.1rem);
+}
+
+#ringPercentText, #ringUsageLabel {
+  position: relative;
+  z-index: 11;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.45);
+}
+
+.hero-stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-2);
+  width: 100%;
+  max-width: 30rem;
+}
+
+.hero-stat {
+  border-radius: var(--radius-md);
+  padding: clamp(0.38rem, 1svh, 0.75rem) clamp(0.38rem, 1vw, 0.6rem);
+  background: var(--surface-muted);
+  border: 1px solid var(--border);
+  min-width: 0;
+}
+
+.hero-stat .k {
+  font-size: clamp(0.56rem, min(1.8vw, 1.4svh), 0.68rem);
+  color: var(--text-muted);
+  font-weight: 700;
+}
+
+.hero-stat .v {
+  font-size: clamp(0.78rem, min(3.4vw, 2.6svh), 1.3rem);
+  font-weight: 900;
+  margin-top: 0.1rem;
+  letter-spacing: -0.02em;
+  direction: ltr;
+  overflow-wrap: anywhere;
+}
+
+.hero-cta {
+  display: flex;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+  justify-content: center;
+  margin-top: 0.2rem;
+  width: 100%;
+}
+
+.btn {
+  min-height: clamp(2.35rem, 5.5svh, 3rem);
+  padding: 0 1.25rem;
+  flex: 1 1 auto;
+  max-width: 15rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  border-radius: 999px;
+  font-weight: 800;
+  font-size: 0.9rem;
+  cursor: pointer;
+  border: 1px solid var(--border);
+  transition: transform 150ms ease, box-shadow 150ms ease, background 150ms ease, color 150ms ease;
+}
+
+.btn:hover {
+  transform: translateY(-2px);
+}
+
+.btn:active {
+  transform: scale(0.97);
+}
+
+.btn-primary {
+  border: 0;
+  color: #fff;
+  background: linear-gradient(120deg, var(--accent-bright), #3053a1);
+  box-shadow: 0 12px 28px rgba(37, 99, 235, 0.32);
+}
+
+.btn-ghost {
+  background: var(--surface-muted);
+  color: var(--text-primary);
+}
+
+.btn-ghost:hover {
+  border-color: var(--border-strong);
+  color: var(--accent);
+}
+
+/* ==================== STATUS VIEW ==================== */
+
+.stat-cards {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-2);
+}
+
+.stat-card {
+  background: var(--surface-muted);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 0.85rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  min-width: 0;
+  transition: border-color 160ms ease, transform 160ms ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-2px);
+  border-color: var(--border-strong);
+}
+
+.stat-title {
+  color: var(--text-secondary);
+  font-size: 0.74rem;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.stat-title i {
+  color: var(--accent);
+}
+
+.stat-number {
+  font-size: clamp(1.05rem, 4vw, 1.6rem);
+  font-weight: 900;
+  line-height: 1.05;
+  letter-spacing: -0.03em;
+  direction: ltr;
+  display: inline-block;
+  overflow-wrap: anywhere;
+}
+
+.stat-unit {
+  color: var(--text-secondary);
+  font-size: 0.78rem;
+  font-weight: 600;
+}
+
+#statusChip {
+  width: fit-content;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.15rem 0.6rem;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 800;
+  background: var(--status-active-bg);
+  border: 1px solid var(--status-active-border);
+  color: var(--status-active-text);
+}
+
+#statusChip.is-inactive {
+  background: var(--status-inactive-bg);
+  border-color: var(--status-inactive-border);
+  color: var(--status-inactive-text);
+}
+
+.traffic-row {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-2);
+}
+
+.traffic-item {
+  background: var(--surface-muted);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 0.7rem;
+  text-align: center;
+  font-size: clamp(0.78rem, 2.6vw, 0.9rem);
+  font-weight: 800;
+  direction: ltr;
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+
+.traffic-item i {
+  color: var(--accent);
+  margin-inline-end: 0.3rem;
+}
+
+.traffic-item small {
+  display: block;
+  color: var(--text-secondary);
+  font-size: 0.7rem;
+  font-weight: 600;
+  margin-top: 0.15rem;
+  direction: rtl;
+}
+
+/* ==================== 7-DAY CHART ==================== */
+
+.chart-panel {
+  padding: clamp(0.9rem, 2.2vw, 1.25rem);
+  background: var(--surface-muted);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  width: 100%;
+  min-width: 0;
+}
+
+.chart-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.6rem;
+}
+
+.chart-title {
+  font-size: 0.82rem;
+  font-weight: 800;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.chart-title i {
+  color: var(--accent);
+}
+
+.chart-svg-wrap {
+  position: relative;
+  width: 100%;
+  height: var(--chart-h);
+  min-height: 90px;
+}
+
+.sparkline-svg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  overflow: visible;
+}
+
+.chart-dot {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--accent);
+  border: 2px solid var(--bg);
+  transform: translate(-50%, -50%);
+  cursor: pointer;
+  z-index: 5;
+  transition: width 0.15s ease, height 0.15s ease, box-shadow 0.15s ease;
+}
+
+.chart-dot.is-active {
+  width: 16px;
+  height: 16px;
+  box-shadow: 0 0 0 6px var(--accent-soft);
+}
+
+.chart-hit {
+  position: absolute;
+  width: 40px;
+  height: 100%;
+  top: 0;
+  transform: translateX(-50%);
+  cursor: pointer;
+  z-index: 4;
+  background: transparent;
+  border: none;
+  padding: 0;
+}
+
+.chart-guide {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 0;
+  border-inline-start: 1.5px dashed var(--accent);
+  opacity: 0.55;
+  display: none;
+  z-index: 3;
+  pointer-events: none;
+}
+
+.chart-tooltip {
+  position: absolute;
+  background: var(--surface-strong);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid var(--border-strong);
+  border-radius: 0.6rem;
+  padding: 0.45rem 0.75rem;
+  pointer-events: none;
+  font-size: 0.76rem;
+  color: var(--text-primary);
+  display: none;
+  flex-direction: column;
+  gap: 0.15rem;
+  box-shadow: var(--shadow-sm);
+  z-index: 10;
+  white-space: nowrap;
+  min-width: 7rem;
+  max-width: 12rem;
+  text-align: center;
+}
+
+.chart-dates {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.66rem;
+  color: var(--text-secondary);
+  margin-top: 0.5rem;
+  direction: ltr;
+}
+
+.expiry-box {
+  border: 1px solid var(--border);
+  background: linear-gradient(150deg, var(--accent-soft), transparent 72%);
+  border-radius: var(--radius-md);
+  padding: var(--space-3);
+  text-align: center;
+  font-size: 0.85rem;
+}
+
+.countdown {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-2);
+  margin-top: var(--space-2);
+}
+
+.cd-unit {
+  background: var(--surface-muted);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  padding: 0.55rem;
+  text-align: center;
+  min-width: 0;
+}
+
+.cd-number {
+  font-size: clamp(1.1rem, 4vw, 1.6rem);
+  font-weight: 900;
+  line-height: 1.05;
+  direction: ltr;
+}
+
+.cd-unit span {
+  color: var(--text-secondary);
+  font-size: 0.68rem;
+  font-weight: 600;
+}
+
+/* ==================== CONFIG VIEW ==================== */
+
+.configs-section {
+  flex: 1 1 auto !important;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.section-header {
+  padding: var(--space-3) var(--space-4);
+  border-bottom: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  flex-wrap: wrap;
+}
+
+.config-list {
+  padding: var(--space-3);
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  display: grid;
+  align-content: start;
+  gap: var(--space-2);
+  grid-auto-rows: min-content;
+}
+
+.config-item {
+  background: var(--surface-muted);
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
+  padding: 0.75rem 0.9rem;
+  min-width: 0;
+  overflow: hidden;
+  transition: transform 150ms ease, border-color 150ms ease, background 150ms ease;
+}
+
+.config-item:hover {
+  transform: translateY(-2px);
+  border-color: var(--border-strong);
+  background: var(--accent-soft);
+}
+
+.config-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  margin-bottom: 0.45rem;
+}
+
+.config-name {
+  min-width: 0;
+  max-width: 72%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-weight: 800;
+  color: var(--accent);
+  background: var(--accent-soft);
+  border: 1px solid var(--border-strong);
+  border-radius: 999px;
+  padding: 0.2rem 0.75rem;
+  font-size: 0.76rem;
+}
+
+.config-actions {
+  display: flex;
+  gap: 0.35rem;
+  flex: 0 0 auto;
+}
+
+.mini-action {
+  width: 2.4rem;
+  height: 2.4rem;
+  display: inline-grid;
+  place-items: center;
+  border: 1px solid var(--border);
+  border-radius: 0.8rem;
+  color: var(--text-secondary);
+  background: transparent;
+  cursor: pointer;
+  transition: 150ms ease;
+}
+
+.mini-action:hover {
+  color: var(--accent);
+  background: var(--surface-strong);
+  border-color: var(--border-strong);
+}
+
+.mini-action:active {
+  transform: scale(0.92);
+}
+
+.config-link {
+  direction: ltr;
+  text-align: left;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, monospace;
+  font-size: 0.74rem;
+  color: var(--text-muted);
+  word-break: break-all;
+  overflow-wrap: anywhere;
+}
+
+.count-badge {
+  font-size: 0.72rem;
+  color: var(--accent);
+  background: var(--accent-soft);
+  padding: 0.2rem 0.7rem;
+  border-radius: 999px;
+  border: 1px solid var(--border-strong);
+  font-weight: 700;
+}
+
+.copy-all-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.45rem 0.85rem;
+  min-height: 2.4rem;
+  font-size: 0.74rem;
+  font-weight: 700;
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  background: var(--surface-muted);
+  color: var(--text-primary);
+  cursor: pointer;
+  transition: 150ms ease;
+}
+
+.copy-all-btn:hover {
+  color: var(--accent);
+  border-color: var(--border-strong);
+}
+
+/* ==================== APPLICATION VIEW ==================== */
+
+.apps-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-2);
+  align-items: start;
+}
+
+.app-card {
+  background: var(--surface-muted);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  align-self: start;
+  transition: border-color 150ms ease;
+}
+
+.app-card:hover {
+  border-color: var(--border-strong);
+}
+
+.app-toggle {
+  min-height: 54px;
+  padding: 0 var(--space-3);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  font-weight: 800;
+  width: 100%;
+  background: none;
+  border: none;
+  text-align: start;
+  color: inherit;
+}
+
+.app-title {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.app-title i {
+  color: var(--accent);
+  width: 1.2rem;
+  text-align: center;
+}
+
+.app-toggle .chev {
+  color: var(--text-secondary);
+  font-size: 0.8rem;
+  transition: transform 200ms ease;
+}
+
+.app-links {
+  display: none;
+  padding: 0 var(--space-3) var(--space-3);
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.app-card.open .app-links {
+  display: flex;
+  border-top: 1px solid var(--border);
+  padding-top: var(--space-2);
+}
+
+.app-card.open .chev {
+  transform: rotate(180deg);
+}
+
+.app-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  padding: 0.7rem 0.75rem;
+  min-height: 2.75rem;
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  font-size: 0.85rem;
+  transition: 140ms ease;
+}
+
+.app-link:hover {
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+/* ==================== DOCK (macOS style + sliding pill) ==================== */
+
+.dock-wrap {
+  display: flex;
+  justify-content: center;
+}
+
+.dock {
+  position: relative;
+  display: flex;
+  align-items: flex-end;
+  gap: 1.2rem;
+  padding: 0.5rem 0.7rem;
+  border-radius: var(--radius-lg);
+  background: var(--surface-strong);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-lg), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+}
+
+.dock-item {
+  position: relative;
+  width: 3.3rem;
+  height: 3.3rem;
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  color: var(--text-secondary);
+  font-size: 1.35rem;
+  background: transparent;
+  border: none;
+  padding: 0;
+  z-index: 1;
+  transition: color 220ms ease, transform 140ms ease;
+}
+
+.dock-item:active {
+  transform: scale(0.92);
+}
+
+.dock-item i {
+  display: inline-block;
+  transition: transform 260ms ease, filter 220ms ease;
+}
+
+.dock-item .dock-label {
+  position: absolute;
+  top: 50px;
+  left: 50%;
+  transform: translateX(-50%) translateY(6px);
+  padding: 0.25rem 0.65rem;
+  border-radius: 0.6rem;
+  white-space: nowrap;
+  font-size: 0.72rem;
+  font-weight: 700;
+  background: var(--surface-strong);
+  border: 1px solid var(--border);
+  color: var(--text-primary);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 160ms ease, transform 160ms ease;
+}
+
+.dock-item:hover .dock-label {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+.dock-item .dot {
+  display: none !important;
+}
+
+/* --- Sliding pill --- */
+
+.dock-pill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  border-radius: var(--radius-sm);
+  background: radial-gradient(circle at 50% 35%, var(--accent-soft), transparent 72%);
+  border: 1px solid var(--border-strong);
+  box-shadow: 0 10px 24px rgba(79, 155, 255, 0.22), inset 0 1px 0 rgba(255, 255, 255, 0.07);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 0;
+  will-change: transform, width, height;
+}
+
+.dock.dock-ready .dock-pill {
+  transition: transform 460ms cubic-bezier(0.34, 1.4, 0.5, 1), width 400ms cubic-bezier(0.34, 1.4, 0.5, 1), height 400ms cubic-bezier(0.34, 1.4, 0.5, 1), opacity 220ms ease;
+}
+
+.dock-item.active {
+  color: var(--accent);
+}
+
+.dock-item.active i {
+  transition: transform 520ms cubic-bezier(0.34, 1.6, 0.5, 1), filter 260ms ease;
+  transform: translateY(-1px) scale(1.15);
+  filter: drop-shadow(0 4px 12px rgba(79, 155, 255, 0.5));
+}
+
+@media (hover: hover) {
+  .dock-item:hover {
+    color: var(--accent-bright);
+  }
+}
+
+@media (hover: hover) {
+  .dock-item:not(.active):hover i {
+    transform: translateY(-2px) scale(1.08);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .dock.dock-ready .dock-pill, .dock-item, .dock-item i {
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* ==================== MODAL / TOAST ==================== */
+
+.modal {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  background: rgba(0,0,0,0.3);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+.modal.show {
+  display: flex;
+}
+
+.modal-content {
+  width: min(100%, 23rem);
+  max-height: 90dvh;
+  overflow-y: auto;
+  padding: var(--space-5);
+  border-radius: var(--radius-xl);
+  border: 1px solid var(--border);
+  background: var(--surface);
+  box-shadow: var(--shadow-lg);
+}
+
+.qr-img {
+  width: 100%;
+  border-radius: var(--radius-md);
+  background: #fff;
+  padding: 0.7rem;
+}
+
+.toast {
+  position: fixed;
+  left: 50%;
+  bottom: max(6.5rem, calc(env(safe-area-inset-bottom) + 6.5rem));
+  z-index: 200;
+  transform: translateX(-50%) translateY(16px);
+  opacity: 0;
+  pointer-events: none;
+  padding: 0.7rem 1.2rem;
+  border-radius: 999px;
+  color: var(--text-primary);
+  background: var(--surface-strong);
+  border: 1px solid var(--border-strong);
+  box-shadow: var(--shadow-sm);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  transition: 180ms ease;
+  font-weight: 700;
+  font-size: 0.85rem;
+  max-width: calc(100vw - 2rem);
+  text-align: center;
+}
+
+.toast.show {
+  opacity: 1;
+  transform: translateX(-50%) translateY(0);
+}
+
+/* ==================== RESPONSIVE ==================== */
+
+@media (max-width: 760px) {
+  .app-shell {
+    width: 100vw;
+    max-width: 100vw;
+    margin: 0;
+    padding: max(0.8rem, env(safe-area-inset-top)) max(0.8rem, env(safe-area-inset-right)) max(0.9rem, env(safe-area-inset-bottom)) max(0.8rem, env(safe-area-inset-left));
+    gap: 0.85rem;
+  }
+}
+
+@media (max-width: 760px) {
+  .app-header {
+    border-radius: var(--radius-lg);
+  }
+}
+
+@media (max-width: 760px) {
+  .apps-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 760px) {
+  .brand-sub {
+    display: none;
+  }
+}
+
+@media (max-width: 560px) {
+  .app-shell {
+    padding: max(0.75rem, env(safe-area-inset-top)) max(0.8rem, env(safe-area-inset-right)) max(0.8rem, env(safe-area-inset-bottom)) max(0.8rem, env(safe-area-inset-left));
+  }
+}
+
+@media (max-width: 560px) {
+  .hero-cta {
+    flex-direction: column;
+  }
+}
+
+@media (max-width: 560px) {
+  .btn {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+@media (max-width: 560px) {
+  .dock {
+    width: 100%;
+    justify-content: space-around;
+    gap: 0.4rem;
+    padding: 0.7rem 0.55rem 0.85rem;
+    border-radius: var(--radius-md);
+  }
+}
+
+@media (max-width: 560px) {
+  .dock-item {
+    width: auto;
+    flex: 1 1 0;
+    height: 3.6rem;
+    max-width: 5rem;
+    font-size: 1.45rem;
+    border-radius: var(--radius-sm);
+  }
+}
+
+@media (max-width: 560px) {
+  .dock-item .dock-label {
+    display: none;
+  }
+}
+
+@media (max-width: 560px) {
+  .icon-btn {
+    width: 2.9rem;
+    height: 2.9rem;
+    font-size: 1.05rem;
+  }
+}
+
+@media (max-width: 420px) {
+  .stat-cards {
+    gap: 0.5rem;
+  }
+}
+
+@media (max-width: 420px) {
+  .stat-card {
+    padding: 0.7rem 0.6rem;
+    border-radius: var(--radius-sm);
+  }
+}
+
+@media (max-width: 420px) {
+  .stat-title {
+    font-size: 0.68rem;
+  }
+}
+
+@media (max-width: 420px) {
+  .traffic-row {
+    gap: 0.5rem;
+  }
+}
+
+@media (max-width: 420px) {
+  .chart-panel {
+    padding: 0.8rem;
+  }
+}
+
+@media (max-width: 420px) {
+  .countdown {
+    gap: 0.5rem;
+  }
+}
+
+@media (max-width: 420px) {
+  .section-header {
+    padding: var(--space-2) var(--space-3);
+  }
+}
+
+@media (max-width: 420px) {
+  .config-name {
+    max-width: 60%;
+  }
+}
+
+@media (max-width: 360px) {
+  .hero-stats {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+@media (max-width: 360px) {
+  .hero-stats .hero-stat:nth-child(3) {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-height: 580px) {
+  .premium-tag {
+    display: none;
+  }
+}
+
+@media (max-height: 580px) {
+  .hero-greeting {
+    display: none;
+  }
+}
+
+@media (max-height: 580px) {
+  :root {
+    --ring-size: clamp(80px, min(34vw, 18svh, 18vh), 148px);
+  }
+}
+
+@media (max-height: 580px) {
+  .hero {
+    gap: clamp(0.22rem, 1.2svh, 0.6rem);
+    padding: clamp(0.45rem, 1.5svh, 1rem);
+  }
+}
+
+@media (max-height: 420px) {
+  .hero-stats {
+    display: none;
+  }
+}
+
+@media (max-height: 420px) {
+  :root {
+    --ring-size: clamp(72px, 16svh, 110px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}
+
+/* ==================== INSTALL POPUP (bottom sheet) ==================== */
+
+.install-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  background: rgba(0,0,0,0.58);
+  backdrop-filter: blur(7px);
+  -webkit-backdrop-filter: blur(7px);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 280ms ease;
+}
+
+.install-overlay.visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.install-sheet {
+  width: min(100%, 480px);
+  background: var(--surface-strong);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+  padding: 0.6rem 1.5rem max(1.6rem, env(safe-area-inset-bottom));
+  box-shadow: var(--shadow-lg);
+  transform: translateY(100%);
+  transition: transform 330ms cubic-bezier(0.32,0.72,0,1);
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.install-overlay.visible .install-sheet {
+  transform: translateY(0);
+}
+
+.install-drag-bar {
+  width: 2.6rem;
+  height: 4px;
+  border-radius: 999px;
+  background: var(--border);
+  margin: 0.3rem auto 0;
+}
+
+.install-head {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.install-icon {
+  width: 3.8rem;
+  height: 3.8rem;
+  flex: 0 0 auto;
+  border-radius: 1.1rem;
+  background: linear-gradient(140deg, var(--accent-bright), var(--accent-strong));
+  display: grid;
+  place-items: center;
+  font-size: 1.5rem;
+  color: #fff;
+  box-shadow: 0 8px 22px rgba(37,99,235,0.38);
+}
+
+.install-info {
+  min-width: 0;
+}
+
+.install-app-name {
+  font-weight: 800;
+  font-size: 1.05rem;
+  letter-spacing: -0.01em;
+}
+
+.install-app-sub {
+  color: var(--text-secondary);
+  font-size: 0.78rem;
+  margin-top: 0.12rem;
+}
+
+.install-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+
+.install-step {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.6rem 0.8rem;
+  border-radius: var(--radius-sm);
+  background: var(--surface-muted);
+  border: 1px solid var(--border);
+}
+
+.install-step-num {
+  width: 1.65rem;
+  height: 1.65rem;
+  border-radius: 50%;
+  flex: 0 0 auto;
+  background: var(--accent-soft);
+  border: 1px solid var(--border-strong);
+  display: grid;
+  place-items: center;
+  font-size: 0.73rem;
+  font-weight: 900;
+  color: var(--accent);
+}
+
+.install-step-text {
+  font-size: 0.81rem;
+  font-weight: 600;
+  line-height: 1.45;
+  flex: 1;
+}
+
+.install-step-ico {
+  flex: 0 0 auto;
+  color: var(--accent);
+  font-size: 0.95rem;
+}
+
+.install-btns {
+  display: flex;
+  gap: 0.6rem;
+}
+
+.install-btns .btn {
+  flex: 1;
+}
+
+.install-later {
+  flex: 1;
+  min-height: 3rem;
+  border-radius: 999px;
+  font-weight: 700;
+  font-size: 0.9rem;
+  background: none;
+  border: 1px solid var(--border);
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: 150ms ease;
+  font-family: inherit;
+}
+
+.install-later:hover {
+  border-color: var(--border-strong);
+  color: var(--text-primary);
+}
+
+/* ==================== SERVICES VIEW ==================== */
+
+.services-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 185px), 1fr));
+  gap: var(--space-3);
+}
+
+.pkg-card {
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  padding: 1.2rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  align-items: center;
+  text-align: center;
+  transition: transform 160ms ease, border-color 160ms ease, box-shadow 160ms ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.pkg-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--border-strong);
+  box-shadow: var(--shadow-lg);
+}
+
+.pkg-card::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, var(--accent-soft), transparent 60%);
+  pointer-events: none;
+}
+
+.pkg-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.22rem 0.72rem;
+  border-radius: 999px;
+  font-size: 0.67rem;
+  font-weight: 800;
+  letter-spacing: 0.08em;
+  color: var(--accent);
+  background: var(--accent-soft);
+  border: 1px solid var(--border-strong);
+}
+
+.pkg-volume {
+  font-size: clamp(1.45rem, 5.5vw, 2rem);
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  direction: ltr;
+}
+
+.pkg-days {
+  font-size: 0.78rem;
+  color: var(--text-secondary);
+  font-weight: 600;
+}
+
+.pkg-divider {
+  width: 100%;
+  height: 1px;
+  background: var(--border);
+  margin: 0.1rem 0;
+}
+
+.pkg-price {
+  font-size: clamp(1rem, 3.6vw, 1.35rem);
+  font-weight: 900;
+  letter-spacing: -0.02em;
+  color: var(--accent-bright);
+  direction: ltr;
+}
+
+.pkg-currency {
+  font-size: 0.72rem;
+  color: var(--text-muted);
+  font-weight: 700;
+  margin-top: -0.1rem;
+}
+
+.pkg-popular {
+  position: absolute;
+  top: 0.65rem;
+  left: auto;
+  right: 0.65rem;
+  padding: 0.18rem 0.55rem;
+  border-radius: 999px;
+  font-size: 0.6rem;
+  font-weight: 800;
+  letter-spacing: 0.06em;
+  background: linear-gradient(120deg, var(--accent-bright), var(--accent-strong));
+  color: #fff;
+  white-space: nowrap;
+}
+
+html[dir="ltr"] .pkg-popular {
+  right: auto;
+  left: 0.65rem;
+}
+
+.services-contact {
+  text-align: center;
+  font-size: 0.77rem;
+  color: var(--text-muted);
+  padding: 0.5rem;
+  line-height: 1.65;
+}
+
+.notif-dot {
+  position: absolute;
+  top: 0px;
+  right: 0px;
+  width: 9px;
+  height: 9px;
+  background-color: #ff5248;
+  border-radius: 50%;
+  animation: blink-dot 1.5s ease-in-out infinite !important;
+  border: 1px solid var(--border);
+  pointer-events: none;
+  box-shadow: 0 0 10px rgba(255, 59, 48, 0.6);
+}
+
+@keyframes blink-dot {
+  0% {
+    opacity: 1;
+    transform: scale(1);
+  }
+  70% {
+    opacity: 0.2;
+    transform: scale(0.85);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+</style>
+            <link rel="apple-touch-icon" href="data:image/svg+xml,%3Csvg%20xmlns%3D'http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg'%20width%3D'512'%20height%3D'512'%20viewBox%3D'0%200%20512%20512'%3E%0A%20%20%3Cdefs%3E%3ClinearGradient%20id%3D'grad'%20x1%3D'0%25'%20y1%3D'0%25'%20x2%3D'100%25'%20y2%3D'100%25'%3E%0A%20%20%20%20%3Cstop%20offset%3D'0%25'%20stop-color%3D'%2340c4a2'%2F%3E%3Cstop%20offset%3D'100%25'%20stop-color%3D'%2318b2f0'%2F%3E%0A%20%20%3C%2FlinearGradient%3E%3C%2Fdefs%3E%0A%20%20%3Ccircle%20cx%3D'256'%20cy%3D'256'%20r%3D'245'%20fill%3D'url(%23grad)'%2F%3E%0A%20%20%3Cg%20stroke%3D'%23ffffff'%20fill%3D'none'%20stroke-width%3D'16'%20stroke-linecap%3D'round'%3E%0A%20%20%20%20%3Ccircle%20cx%3D'256'%20cy%3D'256'%20r%3D'155'%2F%3E%0A%20%20%20%20%3Cpath%20d%3D'M%20101%20256%20Q%20178%20160%20256%20101'%2F%3E%0A%20%20%20%20%3Cpath%20d%3D'M%20411%20256%20Q%20334%20160%20256%20101'%2F%3E%0A%20%20%20%20%3Cpath%20d%3D'M%20101%20256%20Q%20178%20352%20256%20411'%2F%3E%0A%20%20%20%20%3Cpath%20d%3D'M%20411%20256%20Q%20334%20352%20256%20411'%2F%3E%0A%20%20%3C%2Fg%3E%0A%20%20%3Crect%20x%3D'110'%20y%3D'190'%20width%3D'292'%20height%3D'132'%20rx%3D'10'%20fill%3D'%23ffffff'%2F%3E%0A%20%20%3Ctext%20x%3D'256'%20y%3D'300'%20font-family%3D'Arial%2C%20sans-serif'%20font-size%3D'130'%20font-weight%3D'bold'%20fill%3D'%231ebae1'%20text-anchor%3D'middle'%3EVPN%3C%2Ftext%3E%0A%3C%2Fsvg%3E"></head>
+            <body>
+                
+                <script>(function installPreviewLinkGuard() {
+        var noticeTimer;
+
+        function showNotice(message) {
+            var notice = document.getElementById('lw-preview-link-notice');
+            if (!notice) {
+                notice = document.createElement('div');
+                notice.id = 'lw-preview-link-notice';
+                notice.setAttribute('role', 'status');
+                notice.style.cssText = 'position:fixed;left:12px;bottom:12px;z-index:2147483647;max-width:calc(100% - 24px);padding:10px 14px;border-radius:9px;background:#17212d;color:#fff;font:13px/1.4 system-ui,sans-serif;box-shadow:0 8px 24px rgba(0,0,0,.25);pointer-events:none;';
+                document.body.appendChild(notice);
+            }
+            notice.textContent = message;
+            notice.hidden = false;
+            clearTimeout(noticeTimer);
+            noticeTimer = setTimeout(function() { notice.hidden = true; }, 3500);
+        }
+
+        document.addEventListener('click', function(event) {
+            var link = event.target.closest && event.target.closest('a[href]');
+            if (!link || event.defaultPrevented) return;
+
+            var href = (link.getAttribute('href') || '').trim();
+            if (href.charAt(0) === '#') {
+                event.preventDefault();
+                var fragment = href.slice(1);
+                if (!fragment) {
+                    window.scrollTo(0, 0);
+                    return;
+                }
+                try { fragment = decodeURIComponent(fragment); } catch (error) {}
+                var target = document.getElementById(fragment) || document.getElementsByName(fragment)[0];
+                if (target) target.scrollIntoView();
+                return;
+            }
+
+            if (/^(https?:)?\/\//i.test(href)) {
+                event.preventDefault();
+                window.open(href, '_blank', 'noopener,noreferrer');
+                return;
+            }
+
+            if (/^(mailto:|tel:)/i.test(href)) return;
+
+            event.preventDefault();
+            showNotice('This page cannot be opened in the preview.');
+        }, true);
+    })();</script>
+                
+
+
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+    <title>VPNCENTERS</title>
+    <meta property="og:type" content="website">
+    <meta name="theme-color" content="#161a22">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="VPNCENTERS">
+    <script>
+        (function() {
+
+            // JavaScript snippet handling Dark/Light mode switching
+
+            const getStoredTheme = () => localStorage.getItem('theme');
+            const setStoredTheme = theme => localStorage.setItem('theme', theme);
+            const forcedTheme = document.documentElement.getAttribute('data-bss-forced-theme');
+
+            const getPreferredTheme = () => {
+
+                if (forcedTheme) return forcedTheme;
+
+                const storedTheme = getStoredTheme();
+                if (storedTheme) {
+                    return storedTheme;
+                }
+
+                const pageTheme = document.documentElement.getAttribute('data-bs-theme');
+
+                if (pageTheme) {
+                    return pageTheme;
+                }
+
+                return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+            }
+
+            const setTheme = theme => {
+                if (theme === 'auto' && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+                    document.documentElement.setAttribute('data-bs-theme', 'dark');
+                } else {
+                    document.documentElement.setAttribute('data-bs-theme', theme);
+                }
+            }
+
+            setTheme(getPreferredTheme());
+
+            const showActiveTheme = (theme, focus = false) => {
+                const themeSwitchers = [].slice.call(document.querySelectorAll('.theme-switcher'));
+
+                if (!themeSwitchers.length) return;
+
+                document.querySelectorAll('[data-bs-theme-value]').forEach(element => {
+                    element.classList.remove('active');
+                    element.setAttribute('aria-pressed', 'false');
+                });
+
+                const iconTheme = theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme;
+
+                for (const themeSwitcher of themeSwitchers) {
+
+                    const adaptIcon = !!themeSwitcher.dataset.bsAdaptIcon;
+
+                    if (adaptIcon) {
+                        const btnIcon = themeSwitcher.querySelector('[data-bss-adaptable]');
+
+                        try {
+                            const themeIcons = JSON.parse(themeSwitcher.dataset.bssIcons || "{}");
+                            const newIconMarkup = themeIcons[iconTheme];
+
+                            const template = document.createElement("template");
+                            template.innerHTML = newIconMarkup;
+
+                            const newIconFragment = template.content.cloneNode(true);
+
+                            if (newIconFragment?.children?.length) {
+                                newIconFragment.children[0].dataset.bssAdaptable = true;
+                            }
+
+                            btnIcon.replaceWith(newIconFragment);
+                        } catch (e) {}
+                    }
+
+                    const btnToActivate = themeSwitcher.querySelector('[data-bs-theme-value="' + theme + '"]');
+
+                    if (btnToActivate) {
+                        btnToActivate.classList.add('active');
+                        btnToActivate.setAttribute('aria-pressed', 'true');
+                    }
+                }
+            }
+
+            window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+                const storedTheme = getStoredTheme();
+                if (storedTheme !== 'light' && storedTheme !== 'dark') {
+                    setTheme(getPreferredTheme());
+                }
+            });
+
+            window.addEventListener('DOMContentLoaded', () => {
+                showActiveTheme(getPreferredTheme());
+
+                document.querySelectorAll('[data-bs-theme-value]')
+                    .forEach(toggle => {
+                        toggle.addEventListener('click', (e) => {
+                            e.preventDefault();
+                            const theme = toggle.getAttribute('data-bs-theme-value');
+                            setStoredTheme(theme);
+                            setTheme(theme);
+                            showActiveTheme(theme);
+                        })
+                    })
+            });
+        })();
+    </script>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20512%20512'%3E%3Cdefs%3E%3ClinearGradient%20id='g'%20x1='0'%20y1='0'%20x2='1'%20y2='1'%3E%3Cstop%20offset='0'%20stop-color='%2340c4a2'/%3E%3Cstop%20offset='1'%20stop-color='%2318b2f0'/%3E%3C/linearGradient%3E%3C/defs%3E%3Ccircle%20cx='256'%20cy='256'%20r='245'%20fill='url(%23g)'/%3E%3Crect%20x='110'%20y='190'%20width='292'%20height='132'%20rx='10'%20fill='%23fff'/%3E%3Ctext%20x='256'%20y='300'%20font-family='Arial'%20font-size='130'%20font-weight='bold'%20fill='%231ebae1'%20text-anchor='middle'%3EVPN%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Vazirmatn:wght@400;500;600;700;800;900&amp;display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+    
+
+
+    <div class="app-shell">
+        <header class="app-header">
+            <div class="brand">
+                <div><svg xmlns="http://www.w3.org/2000/svg" height="1em" viewBox="0 0 24 24" width="1em" fill="currentColor" style="font-size: 37px;">
+                        <path d="M0 0h24v24H0z" fill="none"></path>
+                        <path d="M22 4v-.5C22 2.12 20.88 1 19.5 1S17 2.12 17 3.5V4c-.55 0-1 .45-1 1v4c0 .55.45 1 1 1h5c.55 0 1-.45 1-1V5c0-.55-.45-1-1-1zm-.8 0h-3.4v-.5c0-.94.76-1.7 1.7-1.7s1.7.76 1.7 1.7V4zm-2.28 8c.04.33.08.66.08 1 0 2.08-.8 3.97-2.1 5.39-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H7v-2h2c.55 0 1-.45 1-1V8h2c1.1 0 2-.9 2-2V3.46c-.95-.3-1.95-.46-3-.46C5.48 3 1 7.48 1 13s4.48 10 10 10 10-4.48 10-10c0-.34-.02-.67-.05-1h-2.03zM10 20.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L8 16v1c0 1.1.9 2 2 2v1.93z"></path>
+                    </svg></div>
+                <div class="brand-text">
+                    <h1 id="panelTitle">VPNCENTERS</h1>
+                    <div class="brand-sub"><span>Premium Access</span></div>
+                </div>
+            </div>
+            <div class="header-actions"><button id="installBtn" class="icon-btn" type="button" aria-label="نصب برنامه" title="نصب برنامه" style="display:none;"><i class="fa-solid fa-download"></i></button><button id="newsBtn" class="icon-btn" type="button" aria-label="اخبار" style="position: relative;"><i class="fa-solid fa-bell"></i><span class="notif-dot"></span></button><button id="themeToggleBtn" class="icon-btn" type="button" aria-label="تغییر حالت روشن و تاریک"><i id="themeIcon" class="fa-solid fa-sun"></i></button><button id="langToggleBtn" class="icon-btn" type="button" aria-label="تغییر زبان"><i class="fa-solid fa-globe"></i></button></div>
+        </header>
+        <main class="stage">
+            <section class="view scroll-hidden active" data-view="home">
+                <div class="hero"><span class="premium-tag"><i class="fa-solid fa-crown"></i><span id="premiumTagText">اشتراک ویژه</span></span>
+                    <div id="heroGreeting" class="hero-greeting">خوش آمدید</div>
+                    <div id="heroTitle" class="hero-title">VPNCENTERS</div>
+                    <div id="userEmailBadge" class="hero-email"></div>
+                    <div class="usage-ring-liquid"><canvas id="liquidBubbleCanvas" width="72" height="72"></canvas>
+                        <div class="ring-percent"><span id="ringPercentText" style="color: rgb(255, 255, 255);">∞</span><span id="ringUsageLabel" style="font-size: 0.72rem; color: rgb(255, 255, 255);">مصرف</span></div>
+                    </div>
+                    <div class="hero-stats">
+                        <div class="hero-stat">
+                            <div id="homeStatusLabel" class="k">وضعیت</div>
+                            <div id="homeStatusValue" class="v" style="font-size: 1rem; color: var(--status-active-text);">فعال</div>
+                        </div>
+                        <div class="hero-stat">
+                            <div id="homeRemainLabel" class="k">روز باقی‌مانده</div>
+                            <div id="homeDaysValue" class="v">∞</div>
+                        </div>
+                        <div class="hero-stat">
+                            <div id="homeVolumeLabel" class="k">حجم باقی‌مانده</div>
+                            <div id="homeVolumeValue" class="v">∞</div>
+                        </div>
+                    </div>
+                    <div class="hero-cta"><button class="btn btn-primary" id="copyMainBtn" type="button"><i class="fa-regular fa-copy"></i><span id="copyMainText">کپی لینک اشتراک</span></button><button class="btn btn-ghost" id="qrMainBtn" type="button"><i class="fa-solid fa-qrcode"></i><span id="qrMainText">نمایش QR</span></button></div>
+                </div>
+            </section>
+            <section class="view scroll-blue" data-view="status">
+                <div class="stat-cards">
+                    <div class="stat-card">
+                        <div class="stat-title"><i class="fa-solid fa-chart-line"></i><span id="usedStatLabel">مصرف شده</span></div>
+                        <div><span id="usedStatValue" class="stat-number">۰</span><span id="usedUnit" class="stat-unit">بایت</span></div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-title"><i class="fa-solid fa-database"></i><span id="totalStatLabel">کل حجم</span></div>
+                        <div><span id="totalStatValue" class="stat-number">∞</span><span class="stat-unit">گیگابایت</span></div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-title"><i class="fa-regular fa-clock"></i><span id="remainStatLabel">باقی‌مانده</span></div>
+                        <div><span id="remainStatValue" class="stat-number">∞</span><span class="stat-unit">گیگابایت</span></div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-title"><i class="fa-regular fa-calendar"></i><span id="expiryStatLabel">انقضا</span></div>
+                        <div><span id="expiryDatePreview" class="stat-number" style="font-size:1rem;">نامحدود</span></div>
+                        <div id="statusChip"><i class="fa-solid fa-circle-check"></i> فعال</div>
+                    </div>
+                </div>
+                <div class="traffic-row">
+                    <div class="traffic-item"><i class="fa-solid fa-arrow-down"></i><span id="downloadVal">۰ بایت</span><small id="downloadLabel">دریافت</small></div>
+                    <div class="traffic-item"><i class="fa-solid fa-arrow-up"></i><span id="uploadVal">۰ بایت</span><small id="uploadLabel">ارسال</small></div>
+                </div>
+                <div id="interactiveChartContainer" class="panel chart-panel">
+                    <div class="chart-head"><span class="chart-title"><i class="fa-solid fa-chart-area"></i><span id="chartHeadLabel">مصرف ۷ روز اخیر</span></span></div>
+                    <div id="chartWrap" class="chart-svg-wrap">    <svg class="sparkline-svg" viewBox="0 0 100 25" preserveAspectRatio="none" aria-hidden="true">
+      <defs>
+        <linearGradient id="chartGlow" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="var(--accent)" stop-opacity="0.32"></stop>
+          <stop offset="100%" stop-color="var(--accent)" stop-opacity="0.0"></stop>
+        </linearGradient>
+      </defs>
+      <path id="chartAreaPath" d="M 4 25 L 4 22 L 19.333333333333336 22 L 34.66666666666667 22 L 50 22 L 65.33333333333334 22 L 80.66666666666667 22 L 96 22 L 96 25 Z" fill="url(#chartGlow)"></path>
+      <path id="chartLinePath" d="M 4 22 L 19.333333333333336 22 L 34.66666666666667 22 L 50 22 L 65.33333333333334 22 L 80.66666666666667 22 L 96 22" fill="none" stroke="var(--accent)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" vector-effect="non-scaling-stroke"></path>
+    </svg>
+                        <div id="chartGuideLine" class="chart-guide" style="display: none;"></div>
+                        <div id="chartDotsLayer" style="position:absolute;inset:0;z-index:4;"><button type="button" class="chart-hit" aria-label="۱۴۰۵/۰۷/۱۱" style="left: 4%;"></button><div class="chart-dot" style="left: 4%; top: 88%;"></div><button type="button" class="chart-hit" aria-label="۱۴۰۵/۰۷/۱۲" style="left: 19.3333%;"></button><div class="chart-dot" style="left: 19.3333%; top: 88%;"></div><button type="button" class="chart-hit" aria-label="۱۴۰۵/۰۷/۱۳" style="left: 34.6667%;"></button><div class="chart-dot" style="left: 34.6667%; top: 88%;"></div><button type="button" class="chart-hit" aria-label="۱۴۰۵/۰۷/۱۴" style="left: 50%;"></button><div class="chart-dot" style="left: 50%; top: 88%;"></div><button type="button" class="chart-hit" aria-label="۱۴۰۵/۰۷/۱۵" style="left: 65.3333%;"></button><div class="chart-dot" style="left: 65.3333%; top: 88%;"></div><button type="button" class="chart-hit" aria-label="۱۴۰۵/۰۷/۱۶" style="left: 80.6667%;"></button><div class="chart-dot" style="left: 80.6667%; top: 88%;"></div><button type="button" class="chart-hit" aria-label="۱۴۰۵/۰۷/۱۷" style="left: 96%;"></button><div class="chart-dot" style="left: 96%; top: 88%;"></div></div>
+                        <div id="chartTooltip" class="chart-tooltip" style="display: none;"></div>
+                    </div>
+                    <div class="chart-dates"><span id="chartStartDateLabel">از ۱۴۰۵/۰۷/۱۱</span><span id="chartEndDateLabel">تا امروز۱۴۰۵/۰۷/۱۷</span></div>
+                </div>
+                <div class="expiry-box">
+                    <div><i class="fa-regular fa-hourglass-half"></i><span id="expiryTextLabel">اشتراک شما محدودیت زمانی ندارد</span></div>
+                    <div class="countdown">
+                        <div class="cd-unit">
+                            <div id="daysLeft" class="cd-number">∞</div><span id="daysLabel">روز</span>
+                        </div>
+                        <div class="cd-unit">
+                            <div id="hoursLeft" class="cd-number">∞</div><span id="hoursLabel">ساعت</span>
+                        </div>
+                        <div class="cd-unit">
+                            <div id="minutesLeft" class="cd-number">∞</div><span id="minutesLabel">دقیقه</span>
+                        </div>
+                    </div>
+                    <div id="lastOnlineInfo" style="margin-top:0.6rem;font-size:0.7rem;color:var(--text-secondary);"></div>
+                </div>
+            </section>
+            <section class="view scroll-hidden" data-view="config">
+                <div class="panel configs-section">
+                    <div class="section-header">
+                        <div class="view-heading"><i class="fa-solid fa-key"></i><strong id="configsTitle">کانفیگ‌ها</strong></div>
+                        <div style="display:flex;align-items:center;gap:var(--space-2);"><button id="copyAllConfigsBtn" type="button" class="copy-all-btn" title="کپی همه" aria-label="کپی همه کانفیگ‌ها"><i class="fa-regular fa-copy"></i><span id="copyAllText">کپی همه</span></button><span id="configCountBadge" class="count-badge">۰</span></div>
+                    </div>
+                    <div id="configListContainer" class="config-list scroll-blue"><div style="text-align:center;padding:2rem;">کانفیگی موجود نیست</div></div>
+                </div>
+            </section>
+            <section class="view scroll-blue" data-view="application">
+                <div class="panel panel-pad" style="flex:1 1 auto;min-height:0;display:flex;flex-direction:column;gap:var(--space-3);">
+                    <div class="view-heading"><i class="fa-solid fa-download"></i><strong id="appsTitleApp">برنامه‌های پیشنهادی</strong></div>
+                    <div id="appsGridContainer" class="apps-grid scroll-blue" style="overflow-y:auto;min-height:0;"><div class="app-card"><button type="button" class="app-toggle" aria-expanded="false"><span class="app-title"><i class="fa-brands fa-android"></i><span>Android</span></span><i class="fa-solid fa-chevron-down chev"></i></button><div class="app-links"><a href="https://github.com/2dust/v2rayNG/releases" target="_blank" rel="noopener" class="app-link"><span>v۲rayNG</span> <i class="fa-solid fa-arrow-up-right-from-square"></i></a><a href="https://play.google.com/store/apps/details?id=com.happproxy&amp;pcampaignid=web_share" target="_blank" rel="noopener" class="app-link"><span>Happ</span> <i class="fa-solid fa-arrow-up-right-from-square"></i></a></div></div><div class="app-card"><button type="button" class="app-toggle" aria-expanded="false"><span class="app-title"><i class="fa-brands fa-apple"></i><span>iOS</span></span><i class="fa-solid fa-chevron-down chev"></i></button><div class="app-links"><a href="https://apps.apple.com/us/app/streisand/id6450534064" target="_blank" rel="noopener" class="app-link"><span>Streisand</span> <i class="fa-solid fa-arrow-up-right-from-square"></i></a><a href="https://apps.apple.com/search?term=shadowrocket" target="_blank" rel="noopener" class="app-link"><span>Shadowrocket</span> <i class="fa-solid fa-arrow-up-right-from-square"></i></a></div></div><div class="app-card"><button type="button" class="app-toggle" aria-expanded="false"><span class="app-title"><i class="fa-brands fa-windows"></i><span>Windows</span></span><i class="fa-solid fa-chevron-down chev"></i></button><div class="app-links"><a href="https://github.com/2dust/v2rayN/releases" target="_blank" rel="noopener" class="app-link"><span>v۲rayN</span> <i class="fa-solid fa-arrow-up-right-from-square"></i></a><a href="https://github.com/MatsuriDayo/nekoray" target="_blank" rel="noopener" class="app-link"><span>Nekoray</span> <i class="fa-solid fa-arrow-up-right-from-square"></i></a></div></div><div class="app-card"><button type="button" class="app-toggle" aria-expanded="false"><span class="app-title"><i class="fa-brands fa-apple"></i><span>macOS</span></span><i class="fa-solid fa-chevron-down chev"></i></button><div class="app-links"><a href="https://github.com/yanue/V2rayU" target="_blank" rel="noopener" class="app-link"><span>V۲rayU</span> <i class="fa-solid fa-arrow-up-right-from-square"></i></a><a href="https://happ.app/" target="_blank" rel="noopener" class="app-link"><span>Happ</span> <i class="fa-solid fa-arrow-up-right-from-square"></i></a></div></div></div>
+                </div>
+            </section>
+            <section id="servicesView" class="view scroll-blue" data-view="services">
+                <div class="panel panel-pad" style="flex:0 0 auto;">
+                    <div class="view-heading"><i class="fa-solid fa-store"></i><strong id="servicesTitleEl">خدمات و بسته‌ها</strong></div>
+                </div>
+                <div id="servicesGrid" class="services-grid"><div class="pkg-card">
+      <div class="pkg-badge"><i class="fa-solid fa-box"></i> تک‌لوکیشن</div>
+      <div class="pkg-volume">۱۵ GB</div>
+      <div class="pkg-days">۳۰ روز</div>
+      <div class="pkg-divider"></div>
+      <div class="pkg-price">۱۱۵٬۰۰۰</div>
+      <div class="pkg-currency">تومان</div>
+    </div><div class="pkg-card"><div class="pkg-popular">پرفروش</div>
+      <div class="pkg-badge"><i class="fa-solid fa-box"></i> تک‌لوکیشن</div>
+      <div class="pkg-volume">۳۰ GB</div>
+      <div class="pkg-days">۳۰ روز</div>
+      <div class="pkg-divider"></div>
+      <div class="pkg-price">۱۹۵٬۰۰۰</div>
+      <div class="pkg-currency">تومان</div>
+    </div><div class="pkg-card">
+      <div class="pkg-badge"><i class="fa-solid fa-box"></i> تک‌لوکیشن</div>
+      <div class="pkg-volume">۵۰ GB</div>
+      <div class="pkg-days">۳۰ روز</div>
+      <div class="pkg-divider"></div>
+      <div class="pkg-price">۳۰۰٬۰۰۰</div>
+      <div class="pkg-currency">تومان</div>
+    </div><div class="pkg-card">
+      <div class="pkg-badge"><i class="fa-solid fa-box"></i> تک‌لوکیشن</div>
+      <div class="pkg-volume">۷۰ GB</div>
+      <div class="pkg-days">۳۰ روز</div>
+      <div class="pkg-divider"></div>
+      <div class="pkg-price">۳۸۵٬۰۰۰</div>
+      <div class="pkg-currency">تومان</div>
+    </div><div class="pkg-card">
+      <div class="pkg-badge"><i class="fa-solid fa-box"></i> تک‌لوکیشن</div>
+      <div class="pkg-volume">۱۰۰ GB</div>
+      <div class="pkg-days">۳۰ روز</div>
+      <div class="pkg-divider"></div>
+      <div class="pkg-price">۵۰۰٬۰۰۰</div>
+      <div class="pkg-currency">تومان</div>
+    </div><div class="pkg-card">
+      <div class="pkg-badge"><i class="fa-solid fa-box"></i> مولتی ۲۵ کشور</div>
+      <div class="pkg-volume">۱۰ GB</div>
+      <div class="pkg-days">۳۰ روز</div>
+      <div class="pkg-divider"></div>
+      <div class="pkg-price">۱۸۰٬۰۰۰</div>
+      <div class="pkg-currency">تومان</div>
+    </div><div class="pkg-card">
+      <div class="pkg-badge"><i class="fa-solid fa-box"></i> مولتی ۲۵ کشور</div>
+      <div class="pkg-volume">۲۰ GB</div>
+      <div class="pkg-days">۳۰ روز</div>
+      <div class="pkg-divider"></div>
+      <div class="pkg-price">۳۲۰٬۰۰۰</div>
+      <div class="pkg-currency">تومان</div>
+    </div><div class="pkg-card">
+      <div class="pkg-badge"><i class="fa-solid fa-box"></i> مولتی ۲۵ کشور</div>
+      <div class="pkg-volume">۳۰ GB</div>
+      <div class="pkg-days">۳۰ روز</div>
+      <div class="pkg-divider"></div>
+      <div class="pkg-price">۴۵۰٬۰۰۰</div>
+      <div class="pkg-currency">تومان</div>
+    </div>
+                </div>
+                <p id="servicesNote" class="services-contact">برای خرید و اطلاعات بیشتر با <a href="https://t.me/master_supports" target="_blank" rel="noopener">پشتیبانی @master_supports</a> تماس بگیرید.</p>
+            </section>
+        </main>
+        <nav class="dock-wrap">
+            <div id="dock" class="dock dock-ready"><div class="dock-pill" style="transform: translate(284px, 11.1875px); width: 80px; height: 57.5938px; opacity: 1;"></div><button class="dock-item" data-target="status" type="button" aria-label="وضعیت"><i class="fa-solid fa-chart-line"></i><span class="dock-label" data-label="status">وضعیت</span><span class="dot"></span></button><button class="dock-item" data-target="config" type="button" aria-label="کانفیگ"><i class="fa-solid fa-share-nodes"></i><span class="dock-label" data-label="config">کانفیگ</span><span class="dot"></span></button><button class="dock-item active" data-target="home" type="button" aria-label="خانه"><i class="fa-solid fa-house"></i><span class="dock-label" data-label="home">خانه</span><span class="dot"></span></button><button class="dock-item" data-target="application" type="button" aria-label="برنامه‌ها"><i class="fa-solid fa-mobile-screen-button"></i><span class="dock-label" data-label="application">برنامه‌ها</span><span class="dot"></span></button><button class="dock-item" data-target="services" id="servicesDockItem" type="button" aria-label="خدمات"><i class="fa-duotone fa-solid fa-cart-shopping"></i><span class="dock-label" data-label="services">خدمات</span><span class="dot"></span></button></div>
+        </nav>
+    </div>
+    <div id="newsModal" class="modal" role="dialog" aria-modal="true">
+        <div class="modal-content" style="max-width: 28rem;">    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:1rem;">
+      <strong id="newsModalTitle" style="color:var(--text-primary);">آخرین اخبار</strong>
+      <button id="closeNewsBtn" type="button" aria-label="بستن" style="background:none; border:none; color:var(--text-primary); font-size:1.2rem; cursor:pointer; width:2.4rem; height:2.4rem;"><i class="fa-solid fa-xmark"></i></button>
+    </div>
+    <div id="newsContent" style="max-height:60vh; overflow-y:auto; padding:0.2rem;">
+      <p style="color:var(--text-secondary); text-align:center;">در حال بارگذاری...</p>
+    </div></div>
+    </div>
+    <div id="qrModal" class="modal" role="dialog" aria-modal="true">
+        <div class="modal-content">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem;"><strong id="modalQrTitle">QR کد اشتراک</strong><button id="closeModalBtn" type="button" aria-label="بستن" style="background:none;border:none;color:var(--text-primary);font-size:1.2rem;cursor:pointer;width:2.4rem;height:2.4rem;"><i class="fa-solid fa-xmark"></i></button></div><img id="qrModalImg" class="qr-img" alt="QR Code">
+            <p id="qrModalText" style="font-size:0.74rem;word-break:break-all;margin-top:0.6rem;direction:ltr;color:var(--text-secondary);"></p>
+        </div>
+    </div>
+    <div id="installOverlay" class="install-overlay" role="dialog" aria-modal="true">
+        <div id="installSheet" class="install-sheet">
+            <div class="install-drag-bar"></div>
+            <div class="install-head">
+                <div id="installAppIcon" class="install-icon"><i class="fa-solid fa-shield-halved"></i></div>
+                <div class="install-info">
+                    <div id="installAppName" class="install-app-name"><span>پنل اشتراک</span></div>
+                    <div id="installAppSub" class="install-app-sub"><span>نصب به عنوان اپلیکیشن</span></div>
+                </div>
+            </div>
+            <div id="installSteps" class="install-steps"></div>
+            <div class="install-btns"><button type="button" class="install-later" id="installLaterBtn">بعداً</button><button class="btn btn-primary" type="button" id="installActionBtn" style="display:none;"><i class="fa-solid fa-download"></i> نصب</button></div>
+        </div>
+    </div>
+    <div class="toast hide" role="status" data-bs-animation="false" id="toastMessage" aria-live="polite"><span>Copied!</span></div>
+
+
+
+                <script>
+//---------------------------------------------------------------------
+//
+// QR Code Generator for JavaScript
+//
+// Copyright (c) 2009 Kazuhiko Arase
+//
+// URL: http://www.d-project.com/
+//
+// Licensed under the MIT license:
+//  http://www.opensource.org/licenses/mit-license.php
+//
+// The word 'QR Code' is registered trademark of
+// DENSO WAVE INCORPORATED
+//  http://www.denso-wave.com/qrcode/faqpatent-e.html
+//
+//---------------------------------------------------------------------
+
+var qrcode = function() {
+
+  //---------------------------------------------------------------------
+  // qrcode
+  //---------------------------------------------------------------------
+
+  /**
+   * qrcode
+   * @param typeNumber 1 to 40
+   * @param errorCorrectionLevel 'L','M','Q','H'
+   */
+  var qrcode = function(typeNumber, errorCorrectionLevel) {
+
+    var PAD0 = 0xEC;
+    var PAD1 = 0x11;
+
+    var _typeNumber = typeNumber;
+    var _errorCorrectionLevel = QRErrorCorrectionLevel[errorCorrectionLevel];
+    var _modules = null;
+    var _moduleCount = 0;
+    var _dataCache = null;
+    var _dataList = [];
+
+    var _this = {};
+
+    var makeImpl = function(test, maskPattern) {
+
+      _moduleCount = _typeNumber * 4 + 17;
+      _modules = function(moduleCount) {
+        var modules = new Array(moduleCount);
+        for (var row = 0; row < moduleCount; row += 1) {
+          modules[row] = new Array(moduleCount);
+          for (var col = 0; col < moduleCount; col += 1) {
+            modules[row][col] = null;
+          }
+        }
+        return modules;
+      }(_moduleCount);
+
+      setupPositionProbePattern(0, 0);
+      setupPositionProbePattern(_moduleCount - 7, 0);
+      setupPositionProbePattern(0, _moduleCount - 7);
+      setupPositionAdjustPattern();
+      setupTimingPattern();
+      setupTypeInfo(test, maskPattern);
+
+      if (_typeNumber >= 7) {
+        setupTypeNumber(test);
+      }
+
+      if (_dataCache == null) {
+        _dataCache = createData(_typeNumber, _errorCorrectionLevel, _dataList);
+      }
+
+      mapData(_dataCache, maskPattern);
+    };
+
+    var setupPositionProbePattern = function(row, col) {
+
+      for (var r = -1; r <= 7; r += 1) {
+
+        if (row + r <= -1 || _moduleCount <= row + r) continue;
+
+        for (var c = -1; c <= 7; c += 1) {
+
+          if (col + c <= -1 || _moduleCount <= col + c) continue;
+
+          if ( (0 <= r && r <= 6 && (c == 0 || c == 6) )
+              || (0 <= c && c <= 6 && (r == 0 || r == 6) )
+              || (2 <= r && r <= 4 && 2 <= c && c <= 4) ) {
+            _modules[row + r][col + c] = true;
+          } else {
+            _modules[row + r][col + c] = false;
+          }
+        }
+      }
+    };
+
+    var getBestMaskPattern = function() {
+
+      var minLostPoint = 0;
+      var pattern = 0;
+
+      for (var i = 0; i < 8; i += 1) {
+
+        makeImpl(true, i);
+
+        var lostPoint = QRUtil.getLostPoint(_this);
+
+        if (i == 0 || minLostPoint > lostPoint) {
+          minLostPoint = lostPoint;
+          pattern = i;
+        }
+      }
+
+      return pattern;
+    };
+
+    var setupTimingPattern = function() {
+
+      for (var r = 8; r < _moduleCount - 8; r += 1) {
+        if (_modules[r][6] != null) {
+          continue;
+        }
+        _modules[r][6] = (r % 2 == 0);
+      }
+
+      for (var c = 8; c < _moduleCount - 8; c += 1) {
+        if (_modules[6][c] != null) {
+          continue;
+        }
+        _modules[6][c] = (c % 2 == 0);
+      }
+    };
+
+    var setupPositionAdjustPattern = function() {
+
+      var pos = QRUtil.getPatternPosition(_typeNumber);
+
+      for (var i = 0; i < pos.length; i += 1) {
+
+        for (var j = 0; j < pos.length; j += 1) {
+
+          var row = pos[i];
+          var col = pos[j];
+
+          if (_modules[row][col] != null) {
+            continue;
+          }
+
+          for (var r = -2; r <= 2; r += 1) {
+
+            for (var c = -2; c <= 2; c += 1) {
+
+              if (r == -2 || r == 2 || c == -2 || c == 2
+                  || (r == 0 && c == 0) ) {
+                _modules[row + r][col + c] = true;
+              } else {
+                _modules[row + r][col + c] = false;
+              }
+            }
+          }
+        }
+      }
+    };
+
+    var setupTypeNumber = function(test) {
+
+      var bits = QRUtil.getBCHTypeNumber(_typeNumber);
+
+      for (var i = 0; i < 18; i += 1) {
+        var mod = (!test && ( (bits >> i) & 1) == 1);
+        _modules[Math.floor(i / 3)][i % 3 + _moduleCount - 8 - 3] = mod;
+      }
+
+      for (var i = 0; i < 18; i += 1) {
+        var mod = (!test && ( (bits >> i) & 1) == 1);
+        _modules[i % 3 + _moduleCount - 8 - 3][Math.floor(i / 3)] = mod;
+      }
+    };
+
+    var setupTypeInfo = function(test, maskPattern) {
+
+      var data = (_errorCorrectionLevel << 3) | maskPattern;
+      var bits = QRUtil.getBCHTypeInfo(data);
+
+      // vertical
+      for (var i = 0; i < 15; i += 1) {
+
+        var mod = (!test && ( (bits >> i) & 1) == 1);
+
+        if (i < 6) {
+          _modules[i][8] = mod;
+        } else if (i < 8) {
+          _modules[i + 1][8] = mod;
+        } else {
+          _modules[_moduleCount - 15 + i][8] = mod;
+        }
+      }
+
+      // horizontal
+      for (var i = 0; i < 15; i += 1) {
+
+        var mod = (!test && ( (bits >> i) & 1) == 1);
+
+        if (i < 8) {
+          _modules[8][_moduleCount - i - 1] = mod;
+        } else if (i < 9) {
+          _modules[8][15 - i - 1 + 1] = mod;
+        } else {
+          _modules[8][15 - i - 1] = mod;
+        }
+      }
+
+      // fixed module
+      _modules[_moduleCount - 8][8] = (!test);
+    };
+
+    var mapData = function(data, maskPattern) {
+
+      var inc = -1;
+      var row = _moduleCount - 1;
+      var bitIndex = 7;
+      var byteIndex = 0;
+      var maskFunc = QRUtil.getMaskFunction(maskPattern);
+
+      for (var col = _moduleCount - 1; col > 0; col -= 2) {
+
+        if (col == 6) col -= 1;
+
+        while (true) {
+
+          for (var c = 0; c < 2; c += 1) {
+
+            if (_modules[row][col - c] == null) {
+
+              var dark = false;
+
+              if (byteIndex < data.length) {
+                dark = ( ( (data[byteIndex] >>> bitIndex) & 1) == 1);
+              }
+
+              var mask = maskFunc(row, col - c);
+
+              if (mask) {
+                dark = !dark;
+              }
+
+              _modules[row][col - c] = dark;
+              bitIndex -= 1;
+
+              if (bitIndex == -1) {
+                byteIndex += 1;
+                bitIndex = 7;
+              }
+            }
+          }
+
+          row += inc;
+
+          if (row < 0 || _moduleCount <= row) {
+            row -= inc;
+            inc = -inc;
+            break;
+          }
+        }
+      }
+    };
+
+    var createBytes = function(buffer, rsBlocks) {
+
+      var offset = 0;
+
+      var maxDcCount = 0;
+      var maxEcCount = 0;
+
+      var dcdata = new Array(rsBlocks.length);
+      var ecdata = new Array(rsBlocks.length);
+
+      for (var r = 0; r < rsBlocks.length; r += 1) {
+
+        var dcCount = rsBlocks[r].dataCount;
+        var ecCount = rsBlocks[r].totalCount - dcCount;
+
+        maxDcCount = Math.max(maxDcCount, dcCount);
+        maxEcCount = Math.max(maxEcCount, ecCount);
+
+        dcdata[r] = new Array(dcCount);
+
+        for (var i = 0; i < dcdata[r].length; i += 1) {
+          dcdata[r][i] = 0xff & buffer.getBuffer()[i + offset];
+        }
+        offset += dcCount;
+
+        var rsPoly = QRUtil.getErrorCorrectPolynomial(ecCount);
+        var rawPoly = qrPolynomial(dcdata[r], rsPoly.getLength() - 1);
+
+        var modPoly = rawPoly.mod(rsPoly);
+        ecdata[r] = new Array(rsPoly.getLength() - 1);
+        for (var i = 0; i < ecdata[r].length; i += 1) {
+          var modIndex = i + modPoly.getLength() - ecdata[r].length;
+          ecdata[r][i] = (modIndex >= 0)? modPoly.getAt(modIndex) : 0;
+        }
+      }
+
+      var totalCodeCount = 0;
+      for (var i = 0; i < rsBlocks.length; i += 1) {
+        totalCodeCount += rsBlocks[i].totalCount;
+      }
+
+      var data = new Array(totalCodeCount);
+      var index = 0;
+
+      for (var i = 0; i < maxDcCount; i += 1) {
+        for (var r = 0; r < rsBlocks.length; r += 1) {
+          if (i < dcdata[r].length) {
+            data[index] = dcdata[r][i];
+            index += 1;
+          }
+        }
+      }
+
+      for (var i = 0; i < maxEcCount; i += 1) {
+        for (var r = 0; r < rsBlocks.length; r += 1) {
+          if (i < ecdata[r].length) {
+            data[index] = ecdata[r][i];
+            index += 1;
+          }
+        }
+      }
+
+      return data;
+    };
+
+    var createData = function(typeNumber, errorCorrectionLevel, dataList) {
+
+      var rsBlocks = QRRSBlock.getRSBlocks(typeNumber, errorCorrectionLevel);
+
+      var buffer = qrBitBuffer();
+
+      for (var i = 0; i < dataList.length; i += 1) {
+        var data = dataList[i];
+        buffer.put(data.getMode(), 4);
+        buffer.put(data.getLength(), QRUtil.getLengthInBits(data.getMode(), typeNumber) );
+        data.write(buffer);
+      }
+
+      // calc num max data.
+      var totalDataCount = 0;
+      for (var i = 0; i < rsBlocks.length; i += 1) {
+        totalDataCount += rsBlocks[i].dataCount;
+      }
+
+      if (buffer.getLengthInBits() > totalDataCount * 8) {
+        throw 'code length overflow. ('
+          + buffer.getLengthInBits()
+          + '>'
+          + totalDataCount * 8
+          + ')';
+      }
+
+      // end code
+      if (buffer.getLengthInBits() + 4 <= totalDataCount * 8) {
+        buffer.put(0, 4);
+      }
+
+      // padding
+      while (buffer.getLengthInBits() % 8 != 0) {
+        buffer.putBit(false);
+      }
+
+      // padding
+      while (true) {
+
+        if (buffer.getLengthInBits() >= totalDataCount * 8) {
+          break;
+        }
+        buffer.put(PAD0, 8);
+
+        if (buffer.getLengthInBits() >= totalDataCount * 8) {
+          break;
+        }
+        buffer.put(PAD1, 8);
+      }
+
+      return createBytes(buffer, rsBlocks);
+    };
+
+    _this.addData = function(data, mode) {
+
+      mode = mode || 'Byte';
+
+      var newData = null;
+
+      switch(mode) {
+      case 'Numeric' :
+        newData = qrNumber(data);
+        break;
+      case 'Alphanumeric' :
+        newData = qrAlphaNum(data);
+        break;
+      case 'Byte' :
+        newData = qr8BitByte(data);
+        break;
+      case 'Kanji' :
+        newData = qrKanji(data);
+        break;
+      default :
+        throw 'mode:' + mode;
+      }
+
+      _dataList.push(newData);
+      _dataCache = null;
+    };
+
+    _this.isDark = function(row, col) {
+      if (row < 0 || _moduleCount <= row || col < 0 || _moduleCount <= col) {
+        throw row + ',' + col;
+      }
+      return _modules[row][col];
+    };
+
+    _this.getModuleCount = function() {
+      return _moduleCount;
+    };
+
+    _this.make = function() {
+      if (_typeNumber < 1) {
+        var typeNumber = 1;
+
+        for (; typeNumber < 40; typeNumber++) {
+          var rsBlocks = QRRSBlock.getRSBlocks(typeNumber, _errorCorrectionLevel);
+          var buffer = qrBitBuffer();
+
+          for (var i = 0; i < _dataList.length; i++) {
+            var data = _dataList[i];
+            buffer.put(data.getMode(), 4);
+            buffer.put(data.getLength(), QRUtil.getLengthInBits(data.getMode(), typeNumber) );
+            data.write(buffer);
+          }
+
+          var totalDataCount = 0;
+          for (var i = 0; i < rsBlocks.length; i++) {
+            totalDataCount += rsBlocks[i].dataCount;
+          }
+
+          if (buffer.getLengthInBits() <= totalDataCount * 8) {
+            break;
+          }
+        }
+
+        _typeNumber = typeNumber;
+      }
+
+      makeImpl(false, getBestMaskPattern() );
+    };
+
+    _this.createTableTag = function(cellSize, margin) {
+
+      cellSize = cellSize || 2;
+      margin = (typeof margin == 'undefined')? cellSize * 4 : margin;
+
+      var qrHtml = '';
+
+      qrHtml += '<table style="';
+      qrHtml += ' border-width: 0px; border-style: none;';
+      qrHtml += ' border-collapse: collapse;';
+      qrHtml += ' padding: 0px; margin: ' + margin + 'px;';
+      qrHtml += '">';
+      qrHtml += '<tbody>';
+
+      for (var r = 0; r < _this.getModuleCount(); r += 1) {
+
+        qrHtml += '<tr>';
+
+        for (var c = 0; c < _this.getModuleCount(); c += 1) {
+          qrHtml += '<td style="';
+          qrHtml += ' border-width: 0px; border-style: none;';
+          qrHtml += ' border-collapse: collapse;';
+          qrHtml += ' padding: 0px; margin: 0px;';
+          qrHtml += ' width: ' + cellSize + 'px;';
+          qrHtml += ' height: ' + cellSize + 'px;';
+          qrHtml += ' background-color: ';
+          qrHtml += _this.isDark(r, c)? '#000000' : '#ffffff';
+          qrHtml += ';';
+          qrHtml += '"/>';
+        }
+
+        qrHtml += '</tr>';
+      }
+
+      qrHtml += '</tbody>';
+      qrHtml += '</table>';
+
+      return qrHtml;
+    };
+
+    _this.createSvgTag = function(cellSize, margin, alt, title) {
+
+      var opts = {};
+      if (typeof arguments[0] == 'object') {
+        // Called by options.
+        opts = arguments[0];
+        // overwrite cellSize and margin.
+        cellSize = opts.cellSize;
+        margin = opts.margin;
+        alt = opts.alt;
+        title = opts.title;
+      }
+
+      cellSize = cellSize || 2;
+      margin = (typeof margin == 'undefined')? cellSize * 4 : margin;
+
+      // Compose alt property surrogate
+      alt = (typeof alt === 'string') ? {text: alt} : alt || {};
+      alt.text = alt.text || null;
+      alt.id = (alt.text) ? alt.id || 'qrcode-description' : null;
+
+      // Compose title property surrogate
+      title = (typeof title === 'string') ? {text: title} : title || {};
+      title.text = title.text || null;
+      title.id = (title.text) ? title.id || 'qrcode-title' : null;
+
+      var size = _this.getModuleCount() * cellSize + margin * 2;
+      var c, mc, r, mr, qrSvg='', rect;
+
+      rect = 'l' + cellSize + ',0 0,' + cellSize +
+        ' -' + cellSize + ',0 0,-' + cellSize + 'z ';
+
+      qrSvg += '<svg version="1.1" xmlns="http://www.w3.org/2000/svg"';
+      qrSvg += !opts.scalable ? ' width="' + size + 'px" height="' + size + 'px"' : '';
+      qrSvg += ' viewBox="0 0 ' + size + ' ' + size + '" ';
+      qrSvg += ' preserveAspectRatio="xMinYMin meet"';
+      qrSvg += (title.text || alt.text) ? ' role="img" aria-labelledby="' +
+          escapeXml([title.id, alt.id].join(' ').trim() ) + '"' : '';
+      qrSvg += '>';
+      qrSvg += (title.text) ? '<title id="' + escapeXml(title.id) + '">' +
+          escapeXml(title.text) + '</title>' : '';
+      qrSvg += (alt.text) ? '<description id="' + escapeXml(alt.id) + '">' +
+          escapeXml(alt.text) + '</description>' : '';
+      qrSvg += '<rect width="100%" height="100%" fill="white" cx="0" cy="0"/>';
+      qrSvg += '<path d="';
+
+      for (r = 0; r < _this.getModuleCount(); r += 1) {
+        mr = r * cellSize + margin;
+        for (c = 0; c < _this.getModuleCount(); c += 1) {
+          if (_this.isDark(r, c) ) {
+            mc = c*cellSize+margin;
+            qrSvg += 'M' + mc + ',' + mr + rect;
+          }
+        }
+      }
+
+      qrSvg += '" stroke="transparent" fill="black"/>';
+      qrSvg += '</svg>';
+
+      return qrSvg;
+    };
+
+    _this.createDataURL = function(cellSize, margin) {
+
+      cellSize = cellSize || 2;
+      margin = (typeof margin == 'undefined')? cellSize * 4 : margin;
+
+      var size = _this.getModuleCount() * cellSize + margin * 2;
+      var min = margin;
+      var max = size - margin;
+
+      return createDataURL(size, size, function(x, y) {
+        if (min <= x && x < max && min <= y && y < max) {
+          var c = Math.floor( (x - min) / cellSize);
+          var r = Math.floor( (y - min) / cellSize);
+          return _this.isDark(r, c)? 0 : 1;
+        } else {
+          return 1;
+        }
+      } );
+    };
+
+    _this.createImgTag = function(cellSize, margin, alt) {
+
+      cellSize = cellSize || 2;
+      margin = (typeof margin == 'undefined')? cellSize * 4 : margin;
+
+      var size = _this.getModuleCount() * cellSize + margin * 2;
+
+      var img = '';
+      img += '<img';
+      img += '\u0020src="';
+      img += _this.createDataURL(cellSize, margin);
+      img += '"';
+      img += '\u0020width="';
+      img += size;
+      img += '"';
+      img += '\u0020height="';
+      img += size;
+      img += '"';
+      if (alt) {
+        img += '\u0020alt="';
+        img += escapeXml(alt);
+        img += '"';
+      }
+      img += '/>';
+
+      return img;
+    };
+
+    var escapeXml = function(s) {
+      var escaped = '';
+      for (var i = 0; i < s.length; i += 1) {
+        var c = s.charAt(i);
+        switch(c) {
+        case '<': escaped += '&lt;'; break;
+        case '>': escaped += '&gt;'; break;
+        case '&': escaped += '&amp;'; break;
+        case '"': escaped += '&quot;'; break;
+        default : escaped += c; break;
+        }
+      }
+      return escaped;
+    };
+
+    var _createHalfASCII = function(margin) {
+      var cellSize = 1;
+      margin = (typeof margin == 'undefined')? cellSize * 2 : margin;
+
+      var size = _this.getModuleCount() * cellSize + margin * 2;
+      var min = margin;
+      var max = size - margin;
+
+      var y, x, r1, r2, p;
+
+      var blocks = {
+        '██': '█',
+        '█ ': '▀',
+        ' █': '▄',
+        '  ': ' '
+      };
+
+      var blocksLastLineNoMargin = {
+        '██': '▀',
+        '█ ': '▀',
+        ' █': ' ',
+        '  ': ' '
+      };
+
+      var ascii = '';
+      for (y = 0; y < size; y += 2) {
+        r1 = Math.floor((y - min) / cellSize);
+        r2 = Math.floor((y + 1 - min) / cellSize);
+        for (x = 0; x < size; x += 1) {
+          p = '█';
+
+          if (min <= x && x < max && min <= y && y < max && _this.isDark(r1, Math.floor((x - min) / cellSize))) {
+            p = ' ';
+          }
+
+          if (min <= x && x < max && min <= y+1 && y+1 < max && _this.isDark(r2, Math.floor((x - min) / cellSize))) {
+            p += ' ';
+          }
+          else {
+            p += '█';
+          }
+
+          // Output 2 characters per pixel, to create full square. 1 character per pixels gives only half width of square.
+          ascii += (margin < 1 && y+1 >= max) ? blocksLastLineNoMargin[p] : blocks[p];
+        }
+
+        ascii += '\n';
+      }
+
+      if (size % 2 && margin > 0) {
+        return ascii.substring(0, ascii.length - size - 1) + Array(size+1).join('▀');
+      }
+
+      return ascii.substring(0, ascii.length-1);
+    };
+
+    _this.createASCII = function(cellSize, margin) {
+      cellSize = cellSize || 1;
+
+      if (cellSize < 2) {
+        return _createHalfASCII(margin);
+      }
+
+      cellSize -= 1;
+      margin = (typeof margin == 'undefined')? cellSize * 2 : margin;
+
+      var size = _this.getModuleCount() * cellSize + margin * 2;
+      var min = margin;
+      var max = size - margin;
+
+      var y, x, r, p;
+
+      var white = Array(cellSize+1).join('██');
+      var black = Array(cellSize+1).join('  ');
+
+      var ascii = '';
+      var line = '';
+      for (y = 0; y < size; y += 1) {
+        r = Math.floor( (y - min) / cellSize);
+        line = '';
+        for (x = 0; x < size; x += 1) {
+          p = 1;
+
+          if (min <= x && x < max && min <= y && y < max && _this.isDark(r, Math.floor((x - min) / cellSize))) {
+            p = 0;
+          }
+
+          // Output 2 characters per pixel, to create full square. 1 character per pixels gives only half width of square.
+          line += p ? white : black;
+        }
+
+        for (r = 0; r < cellSize; r += 1) {
+          ascii += line + '\n';
+        }
+      }
+
+      return ascii.substring(0, ascii.length-1);
+    };
+
+    _this.renderTo2dContext = function(context, cellSize) {
+      cellSize = cellSize || 2;
+      var length = _this.getModuleCount();
+      for (var row = 0; row < length; row++) {
+        for (var col = 0; col < length; col++) {
+          context.fillStyle = _this.isDark(row, col) ? 'black' : 'white';
+          context.fillRect(row * cellSize, col * cellSize, cellSize, cellSize);
+        }
+      }
+    }
+
+    return _this;
+  };
+
+  //---------------------------------------------------------------------
+  // qrcode.stringToBytes
+  //---------------------------------------------------------------------
+
+  qrcode.stringToBytesFuncs = {
+    'default' : function(s) {
+      var bytes = [];
+      for (var i = 0; i < s.length; i += 1) {
+        var c = s.charCodeAt(i);
+        bytes.push(c & 0xff);
+      }
+      return bytes;
+    }
+  };
+
+  qrcode.stringToBytes = qrcode.stringToBytesFuncs['default'];
+
+  //---------------------------------------------------------------------
+  // qrcode.createStringToBytes
+  //---------------------------------------------------------------------
+
+  /**
+   * @param unicodeData base64 string of byte array.
+   * [16bit Unicode],[16bit Bytes], ...
+   * @param numChars
+   */
+  qrcode.createStringToBytes = function(unicodeData, numChars) {
+
+    // create conversion map.
+
+    var unicodeMap = function() {
+
+      var bin = base64DecodeInputStream(unicodeData);
+      var read = function() {
+        var b = bin.read();
+        if (b == -1) throw 'eof';
+        return b;
+      };
+
+      var count = 0;
+      var unicodeMap = {};
+      while (true) {
+        var b0 = bin.read();
+        if (b0 == -1) break;
+        var b1 = read();
+        var b2 = read();
+        var b3 = read();
+        var k = String.fromCharCode( (b0 << 8) | b1);
+        var v = (b2 << 8) | b3;
+        unicodeMap[k] = v;
+        count += 1;
+      }
+      if (count != numChars) {
+        throw count + ' != ' + numChars;
+      }
+
+      return unicodeMap;
+    }();
+
+    var unknownChar = '?'.charCodeAt(0);
+
+    return function(s) {
+      var bytes = [];
+      for (var i = 0; i < s.length; i += 1) {
+        var c = s.charCodeAt(i);
+        if (c < 128) {
+          bytes.push(c);
+        } else {
+          var b = unicodeMap[s.charAt(i)];
+          if (typeof b == 'number') {
+            if ( (b & 0xff) == b) {
+              // 1byte
+              bytes.push(b);
+            } else {
+              // 2bytes
+              bytes.push(b >>> 8);
+              bytes.push(b & 0xff);
+            }
+          } else {
+            bytes.push(unknownChar);
+          }
+        }
+      }
+      return bytes;
+    };
+  };
+
+  //---------------------------------------------------------------------
+  // QRMode
+  //---------------------------------------------------------------------
+
+  var QRMode = {
+    MODE_NUMBER :    1 << 0,
+    MODE_ALPHA_NUM : 1 << 1,
+    MODE_8BIT_BYTE : 1 << 2,
+    MODE_KANJI :     1 << 3
+  };
+
+  //---------------------------------------------------------------------
+  // QRErrorCorrectionLevel
+  //---------------------------------------------------------------------
+
+  var QRErrorCorrectionLevel = {
+    L : 1,
+    M : 0,
+    Q : 3,
+    H : 2
+  };
+
+  //---------------------------------------------------------------------
+  // QRMaskPattern
+  //---------------------------------------------------------------------
+
+  var QRMaskPattern = {
+    PATTERN000 : 0,
+    PATTERN001 : 1,
+    PATTERN010 : 2,
+    PATTERN011 : 3,
+    PATTERN100 : 4,
+    PATTERN101 : 5,
+    PATTERN110 : 6,
+    PATTERN111 : 7
+  };
+
+  //---------------------------------------------------------------------
+  // QRUtil
+  //---------------------------------------------------------------------
+
+  var QRUtil = function() {
+
+    var PATTERN_POSITION_TABLE = [
+      [],
+      [6, 18],
+      [6, 22],
+      [6, 26],
+      [6, 30],
+      [6, 34],
+      [6, 22, 38],
+      [6, 24, 42],
+      [6, 26, 46],
+      [6, 28, 50],
+      [6, 30, 54],
+      [6, 32, 58],
+      [6, 34, 62],
+      [6, 26, 46, 66],
+      [6, 26, 48, 70],
+      [6, 26, 50, 74],
+      [6, 30, 54, 78],
+      [6, 30, 56, 82],
+      [6, 30, 58, 86],
+      [6, 34, 62, 90],
+      [6, 28, 50, 72, 94],
+      [6, 26, 50, 74, 98],
+      [6, 30, 54, 78, 102],
+      [6, 28, 54, 80, 106],
+      [6, 32, 58, 84, 110],
+      [6, 30, 58, 86, 114],
+      [6, 34, 62, 90, 118],
+      [6, 26, 50, 74, 98, 122],
+      [6, 30, 54, 78, 102, 126],
+      [6, 26, 52, 78, 104, 130],
+      [6, 30, 56, 82, 108, 134],
+      [6, 34, 60, 86, 112, 138],
+      [6, 30, 58, 86, 114, 142],
+      [6, 34, 62, 90, 118, 146],
+      [6, 30, 54, 78, 102, 126, 150],
+      [6, 24, 50, 76, 102, 128, 154],
+      [6, 28, 54, 80, 106, 132, 158],
+      [6, 32, 58, 84, 110, 136, 162],
+      [6, 26, 54, 82, 110, 138, 166],
+      [6, 30, 58, 86, 114, 142, 170]
+    ];
+    var G15 = (1 << 10) | (1 << 8) | (1 << 5) | (1 << 4) | (1 << 2) | (1 << 1) | (1 << 0);
+    var G18 = (1 << 12) | (1 << 11) | (1 << 10) | (1 << 9) | (1 << 8) | (1 << 5) | (1 << 2) | (1 << 0);
+    var G15_MASK = (1 << 14) | (1 << 12) | (1 << 10) | (1 << 4) | (1 << 1);
+
+    var _this = {};
+
+    var getBCHDigit = function(data) {
+      var digit = 0;
+      while (data != 0) {
+        digit += 1;
+        data >>>= 1;
+      }
+      return digit;
+    };
+
+    _this.getBCHTypeInfo = function(data) {
+      var d = data << 10;
+      while (getBCHDigit(d) - getBCHDigit(G15) >= 0) {
+        d ^= (G15 << (getBCHDigit(d) - getBCHDigit(G15) ) );
+      }
+      return ( (data << 10) | d) ^ G15_MASK;
+    };
+
+    _this.getBCHTypeNumber = function(data) {
+      var d = data << 12;
+      while (getBCHDigit(d) - getBCHDigit(G18) >= 0) {
+        d ^= (G18 << (getBCHDigit(d) - getBCHDigit(G18) ) );
+      }
+      return (data << 12) | d;
+    };
+
+    _this.getPatternPosition = function(typeNumber) {
+      return PATTERN_POSITION_TABLE[typeNumber - 1];
+    };
+
+    _this.getMaskFunction = function(maskPattern) {
+
+      switch (maskPattern) {
+
+      case QRMaskPattern.PATTERN000 :
+        return function(i, j) { return (i + j) % 2 == 0; };
+      case QRMaskPattern.PATTERN001 :
+        return function(i, j) { return i % 2 == 0; };
+      case QRMaskPattern.PATTERN010 :
+        return function(i, j) { return j % 3 == 0; };
+      case QRMaskPattern.PATTERN011 :
+        return function(i, j) { return (i + j) % 3 == 0; };
+      case QRMaskPattern.PATTERN100 :
+        return function(i, j) { return (Math.floor(i / 2) + Math.floor(j / 3) ) % 2 == 0; };
+      case QRMaskPattern.PATTERN101 :
+        return function(i, j) { return (i * j) % 2 + (i * j) % 3 == 0; };
+      case QRMaskPattern.PATTERN110 :
+        return function(i, j) { return ( (i * j) % 2 + (i * j) % 3) % 2 == 0; };
+      case QRMaskPattern.PATTERN111 :
+        return function(i, j) { return ( (i * j) % 3 + (i + j) % 2) % 2 == 0; };
+
+      default :
+        throw 'bad maskPattern:' + maskPattern;
+      }
+    };
+
+    _this.getErrorCorrectPolynomial = function(errorCorrectLength) {
+      var a = qrPolynomial([1], 0);
+      for (var i = 0; i < errorCorrectLength; i += 1) {
+        a = a.multiply(qrPolynomial([1, QRMath.gexp(i)], 0) );
+      }
+      return a;
+    };
+
+    _this.getLengthInBits = function(mode, type) {
+
+      if (1 <= type && type < 10) {
+
+        // 1 - 9
+
+        switch(mode) {
+        case QRMode.MODE_NUMBER    : return 10;
+        case QRMode.MODE_ALPHA_NUM : return 9;
+        case QRMode.MODE_8BIT_BYTE : return 8;
+        case QRMode.MODE_KANJI     : return 8;
+        default :
+          throw 'mode:' + mode;
+        }
+
+      } else if (type < 27) {
+
+        // 10 - 26
+
+        switch(mode) {
+        case QRMode.MODE_NUMBER    : return 12;
+        case QRMode.MODE_ALPHA_NUM : return 11;
+        case QRMode.MODE_8BIT_BYTE : return 16;
+        case QRMode.MODE_KANJI     : return 10;
+        default :
+          throw 'mode:' + mode;
+        }
+
+      } else if (type < 41) {
+
+        // 27 - 40
+
+        switch(mode) {
+        case QRMode.MODE_NUMBER    : return 14;
+        case QRMode.MODE_ALPHA_NUM : return 13;
+        case QRMode.MODE_8BIT_BYTE : return 16;
+        case QRMode.MODE_KANJI     : return 12;
+        default :
+          throw 'mode:' + mode;
+        }
+
+      } else {
+        throw 'type:' + type;
+      }
+    };
+
+    _this.getLostPoint = function(qrcode) {
+
+      var moduleCount = qrcode.getModuleCount();
+
+      var lostPoint = 0;
+
+      // LEVEL1
+
+      for (var row = 0; row < moduleCount; row += 1) {
+        for (var col = 0; col < moduleCount; col += 1) {
+
+          var sameCount = 0;
+          var dark = qrcode.isDark(row, col);
+
+          for (var r = -1; r <= 1; r += 1) {
+
+            if (row + r < 0 || moduleCount <= row + r) {
+              continue;
+            }
+
+            for (var c = -1; c <= 1; c += 1) {
+
+              if (col + c < 0 || moduleCount <= col + c) {
+                continue;
+              }
+
+              if (r == 0 && c == 0) {
+                continue;
+              }
+
+              if (dark == qrcode.isDark(row + r, col + c) ) {
+                sameCount += 1;
+              }
+            }
+          }
+
+          if (sameCount > 5) {
+            lostPoint += (3 + sameCount - 5);
+          }
+        }
+      };
+
+      // LEVEL2
+
+      for (var row = 0; row < moduleCount - 1; row += 1) {
+        for (var col = 0; col < moduleCount - 1; col += 1) {
+          var count = 0;
+          if (qrcode.isDark(row, col) ) count += 1;
+          if (qrcode.isDark(row + 1, col) ) count += 1;
+          if (qrcode.isDark(row, col + 1) ) count += 1;
+          if (qrcode.isDark(row + 1, col + 1) ) count += 1;
+          if (count == 0 || count == 4) {
+            lostPoint += 3;
+          }
+        }
+      }
+
+      // LEVEL3
+
+      for (var row = 0; row < moduleCount; row += 1) {
+        for (var col = 0; col < moduleCount - 6; col += 1) {
+          if (qrcode.isDark(row, col)
+              && !qrcode.isDark(row, col + 1)
+              &&  qrcode.isDark(row, col + 2)
+              &&  qrcode.isDark(row, col + 3)
+              &&  qrcode.isDark(row, col + 4)
+              && !qrcode.isDark(row, col + 5)
+              &&  qrcode.isDark(row, col + 6) ) {
+            lostPoint += 40;
+          }
+        }
+      }
+
+      for (var col = 0; col < moduleCount; col += 1) {
+        for (var row = 0; row < moduleCount - 6; row += 1) {
+          if (qrcode.isDark(row, col)
+              && !qrcode.isDark(row + 1, col)
+              &&  qrcode.isDark(row + 2, col)
+              &&  qrcode.isDark(row + 3, col)
+              &&  qrcode.isDark(row + 4, col)
+              && !qrcode.isDark(row + 5, col)
+              &&  qrcode.isDark(row + 6, col) ) {
+            lostPoint += 40;
+          }
+        }
+      }
+
+      // LEVEL4
+
+      var darkCount = 0;
+
+      for (var col = 0; col < moduleCount; col += 1) {
+        for (var row = 0; row < moduleCount; row += 1) {
+          if (qrcode.isDark(row, col) ) {
+            darkCount += 1;
+          }
+        }
+      }
+
+      var ratio = Math.abs(100 * darkCount / moduleCount / moduleCount - 50) / 5;
+      lostPoint += ratio * 10;
+
+      return lostPoint;
+    };
+
+    return _this;
+  }();
+
+  //---------------------------------------------------------------------
+  // QRMath
+  //---------------------------------------------------------------------
+
+  var QRMath = function() {
+
+    var EXP_TABLE = new Array(256);
+    var LOG_TABLE = new Array(256);
+
+    // initialize tables
+    for (var i = 0; i < 8; i += 1) {
+      EXP_TABLE[i] = 1 << i;
+    }
+    for (var i = 8; i < 256; i += 1) {
+      EXP_TABLE[i] = EXP_TABLE[i - 4]
+        ^ EXP_TABLE[i - 5]
+        ^ EXP_TABLE[i - 6]
+        ^ EXP_TABLE[i - 8];
+    }
+    for (var i = 0; i < 255; i += 1) {
+      LOG_TABLE[EXP_TABLE[i] ] = i;
+    }
+
+    var _this = {};
+
+    _this.glog = function(n) {
+
+      if (n < 1) {
+        throw 'glog(' + n + ')';
+      }
+
+      return LOG_TABLE[n];
+    };
+
+    _this.gexp = function(n) {
+
+      while (n < 0) {
+        n += 255;
+      }
+
+      while (n >= 256) {
+        n -= 255;
+      }
+
+      return EXP_TABLE[n];
+    };
+
+    return _this;
+  }();
+
+  //---------------------------------------------------------------------
+  // qrPolynomial
+  //---------------------------------------------------------------------
+
+  function qrPolynomial(num, shift) {
+
+    if (typeof num.length == 'undefined') {
+      throw num.length + '/' + shift;
+    }
+
+    var _num = function() {
+      var offset = 0;
+      while (offset < num.length && num[offset] == 0) {
+        offset += 1;
+      }
+      var _num = new Array(num.length - offset + shift);
+      for (var i = 0; i < num.length - offset; i += 1) {
+        _num[i] = num[i + offset];
+      }
+      return _num;
+    }();
+
+    var _this = {};
+
+    _this.getAt = function(index) {
+      return _num[index];
+    };
+
+    _this.getLength = function() {
+      return _num.length;
+    };
+
+    _this.multiply = function(e) {
+
+      var num = new Array(_this.getLength() + e.getLength() - 1);
+
+      for (var i = 0; i < _this.getLength(); i += 1) {
+        for (var j = 0; j < e.getLength(); j += 1) {
+          num[i + j] ^= QRMath.gexp(QRMath.glog(_this.getAt(i) ) + QRMath.glog(e.getAt(j) ) );
+        }
+      }
+
+      return qrPolynomial(num, 0);
+    };
+
+    _this.mod = function(e) {
+
+      if (_this.getLength() - e.getLength() < 0) {
+        return _this;
+      }
+
+      var ratio = QRMath.glog(_this.getAt(0) ) - QRMath.glog(e.getAt(0) );
+
+      var num = new Array(_this.getLength() );
+      for (var i = 0; i < _this.getLength(); i += 1) {
+        num[i] = _this.getAt(i);
+      }
+
+      for (var i = 0; i < e.getLength(); i += 1) {
+        num[i] ^= QRMath.gexp(QRMath.glog(e.getAt(i) ) + ratio);
+      }
+
+      // recursive call
+      return qrPolynomial(num, 0).mod(e);
+    };
+
+    return _this;
+  };
+
+  //---------------------------------------------------------------------
+  // QRRSBlock
+  //---------------------------------------------------------------------
+
+  var QRRSBlock = function() {
+
+    var RS_BLOCK_TABLE = [
+
+      // L
+      // M
+      // Q
+      // H
+
+      // 1
+      [1, 26, 19],
+      [1, 26, 16],
+      [1, 26, 13],
+      [1, 26, 9],
+
+      // 2
+      [1, 44, 34],
+      [1, 44, 28],
+      [1, 44, 22],
+      [1, 44, 16],
+
+      // 3
+      [1, 70, 55],
+      [1, 70, 44],
+      [2, 35, 17],
+      [2, 35, 13],
+
+      // 4
+      [1, 100, 80],
+      [2, 50, 32],
+      [2, 50, 24],
+      [4, 25, 9],
+
+      // 5
+      [1, 134, 108],
+      [2, 67, 43],
+      [2, 33, 15, 2, 34, 16],
+      [2, 33, 11, 2, 34, 12],
+
+      // 6
+      [2, 86, 68],
+      [4, 43, 27],
+      [4, 43, 19],
+      [4, 43, 15],
+
+      // 7
+      [2, 98, 78],
+      [4, 49, 31],
+      [2, 32, 14, 4, 33, 15],
+      [4, 39, 13, 1, 40, 14],
+
+      // 8
+      [2, 121, 97],
+      [2, 60, 38, 2, 61, 39],
+      [4, 40, 18, 2, 41, 19],
+      [4, 40, 14, 2, 41, 15],
+
+      // 9
+      [2, 146, 116],
+      [3, 58, 36, 2, 59, 37],
+      [4, 36, 16, 4, 37, 17],
+      [4, 36, 12, 4, 37, 13],
+
+      // 10
+      [2, 86, 68, 2, 87, 69],
+      [4, 69, 43, 1, 70, 44],
+      [6, 43, 19, 2, 44, 20],
+      [6, 43, 15, 2, 44, 16],
+
+      // 11
+      [4, 101, 81],
+      [1, 80, 50, 4, 81, 51],
+      [4, 50, 22, 4, 51, 23],
+      [3, 36, 12, 8, 37, 13],
+
+      // 12
+      [2, 116, 92, 2, 117, 93],
+      [6, 58, 36, 2, 59, 37],
+      [4, 46, 20, 6, 47, 21],
+      [7, 42, 14, 4, 43, 15],
+
+      // 13
+      [4, 133, 107],
+      [8, 59, 37, 1, 60, 38],
+      [8, 44, 20, 4, 45, 21],
+      [12, 33, 11, 4, 34, 12],
+
+      // 14
+      [3, 145, 115, 1, 146, 116],
+      [4, 64, 40, 5, 65, 41],
+      [11, 36, 16, 5, 37, 17],
+      [11, 36, 12, 5, 37, 13],
+
+      // 15
+      [5, 109, 87, 1, 110, 88],
+      [5, 65, 41, 5, 66, 42],
+      [5, 54, 24, 7, 55, 25],
+      [11, 36, 12, 7, 37, 13],
+
+      // 16
+      [5, 122, 98, 1, 123, 99],
+      [7, 73, 45, 3, 74, 46],
+      [15, 43, 19, 2, 44, 20],
+      [3, 45, 15, 13, 46, 16],
+
+      // 17
+      [1, 135, 107, 5, 136, 108],
+      [10, 74, 46, 1, 75, 47],
+      [1, 50, 22, 15, 51, 23],
+      [2, 42, 14, 17, 43, 15],
+
+      // 18
+      [5, 150, 120, 1, 151, 121],
+      [9, 69, 43, 4, 70, 44],
+      [17, 50, 22, 1, 51, 23],
+      [2, 42, 14, 19, 43, 15],
+
+      // 19
+      [3, 141, 113, 4, 142, 114],
+      [3, 70, 44, 11, 71, 45],
+      [17, 47, 21, 4, 48, 22],
+      [9, 39, 13, 16, 40, 14],
+
+      // 20
+      [3, 135, 107, 5, 136, 108],
+      [3, 67, 41, 13, 68, 42],
+      [15, 54, 24, 5, 55, 25],
+      [15, 43, 15, 10, 44, 16],
+
+      // 21
+      [4, 144, 116, 4, 145, 117],
+      [17, 68, 42],
+      [17, 50, 22, 6, 51, 23],
+      [19, 46, 16, 6, 47, 17],
+
+      // 22
+      [2, 139, 111, 7, 140, 112],
+      [17, 74, 46],
+      [7, 54, 24, 16, 55, 25],
+      [34, 37, 13],
+
+      // 23
+      [4, 151, 121, 5, 152, 122],
+      [4, 75, 47, 14, 76, 48],
+      [11, 54, 24, 14, 55, 25],
+      [16, 45, 15, 14, 46, 16],
+
+      // 24
+      [6, 147, 117, 4, 148, 118],
+      [6, 73, 45, 14, 74, 46],
+      [11, 54, 24, 16, 55, 25],
+      [30, 46, 16, 2, 47, 17],
+
+      // 25
+      [8, 132, 106, 4, 133, 107],
+      [8, 75, 47, 13, 76, 48],
+      [7, 54, 24, 22, 55, 25],
+      [22, 45, 15, 13, 46, 16],
+
+      // 26
+      [10, 142, 114, 2, 143, 115],
+      [19, 74, 46, 4, 75, 47],
+      [28, 50, 22, 6, 51, 23],
+      [33, 46, 16, 4, 47, 17],
+
+      // 27
+      [8, 152, 122, 4, 153, 123],
+      [22, 73, 45, 3, 74, 46],
+      [8, 53, 23, 26, 54, 24],
+      [12, 45, 15, 28, 46, 16],
+
+      // 28
+      [3, 147, 117, 10, 148, 118],
+      [3, 73, 45, 23, 74, 46],
+      [4, 54, 24, 31, 55, 25],
+      [11, 45, 15, 31, 46, 16],
+
+      // 29
+      [7, 146, 116, 7, 147, 117],
+      [21, 73, 45, 7, 74, 46],
+      [1, 53, 23, 37, 54, 24],
+      [19, 45, 15, 26, 46, 16],
+
+      // 30
+      [5, 145, 115, 10, 146, 116],
+      [19, 75, 47, 10, 76, 48],
+      [15, 54, 24, 25, 55, 25],
+      [23, 45, 15, 25, 46, 16],
+
+      // 31
+      [13, 145, 115, 3, 146, 116],
+      [2, 74, 46, 29, 75, 47],
+      [42, 54, 24, 1, 55, 25],
+      [23, 45, 15, 28, 46, 16],
+
+      // 32
+      [17, 145, 115],
+      [10, 74, 46, 23, 75, 47],
+      [10, 54, 24, 35, 55, 25],
+      [19, 45, 15, 35, 46, 16],
+
+      // 33
+      [17, 145, 115, 1, 146, 116],
+      [14, 74, 46, 21, 75, 47],
+      [29, 54, 24, 19, 55, 25],
+      [11, 45, 15, 46, 46, 16],
+
+      // 34
+      [13, 145, 115, 6, 146, 116],
+      [14, 74, 46, 23, 75, 47],
+      [44, 54, 24, 7, 55, 25],
+      [59, 46, 16, 1, 47, 17],
+
+      // 35
+      [12, 151, 121, 7, 152, 122],
+      [12, 75, 47, 26, 76, 48],
+      [39, 54, 24, 14, 55, 25],
+      [22, 45, 15, 41, 46, 16],
+
+      // 36
+      [6, 151, 121, 14, 152, 122],
+      [6, 75, 47, 34, 76, 48],
+      [46, 54, 24, 10, 55, 25],
+      [2, 45, 15, 64, 46, 16],
+
+      // 37
+      [17, 152, 122, 4, 153, 123],
+      [29, 74, 46, 14, 75, 47],
+      [49, 54, 24, 10, 55, 25],
+      [24, 45, 15, 46, 46, 16],
+
+      // 38
+      [4, 152, 122, 18, 153, 123],
+      [13, 74, 46, 32, 75, 47],
+      [48, 54, 24, 14, 55, 25],
+      [42, 45, 15, 32, 46, 16],
+
+      // 39
+      [20, 147, 117, 4, 148, 118],
+      [40, 75, 47, 7, 76, 48],
+      [43, 54, 24, 22, 55, 25],
+      [10, 45, 15, 67, 46, 16],
+
+      // 40
+      [19, 148, 118, 6, 149, 119],
+      [18, 75, 47, 31, 76, 48],
+      [34, 54, 24, 34, 55, 25],
+      [20, 45, 15, 61, 46, 16]
+    ];
+
+    var qrRSBlock = function(totalCount, dataCount) {
+      var _this = {};
+      _this.totalCount = totalCount;
+      _this.dataCount = dataCount;
+      return _this;
+    };
+
+    var _this = {};
+
+    var getRsBlockTable = function(typeNumber, errorCorrectionLevel) {
+
+      switch(errorCorrectionLevel) {
+      case QRErrorCorrectionLevel.L :
+        return RS_BLOCK_TABLE[(typeNumber - 1) * 4 + 0];
+      case QRErrorCorrectionLevel.M :
+        return RS_BLOCK_TABLE[(typeNumber - 1) * 4 + 1];
+      case QRErrorCorrectionLevel.Q :
+        return RS_BLOCK_TABLE[(typeNumber - 1) * 4 + 2];
+      case QRErrorCorrectionLevel.H :
+        return RS_BLOCK_TABLE[(typeNumber - 1) * 4 + 3];
+      default :
+        return undefined;
+      }
+    };
+
+    _this.getRSBlocks = function(typeNumber, errorCorrectionLevel) {
+
+      var rsBlock = getRsBlockTable(typeNumber, errorCorrectionLevel);
+
+      if (typeof rsBlock == 'undefined') {
+        throw 'bad rs block @ typeNumber:' + typeNumber +
+            '/errorCorrectionLevel:' + errorCorrectionLevel;
+      }
+
+      var length = rsBlock.length / 3;
+
+      var list = [];
+
+      for (var i = 0; i < length; i += 1) {
+
+        var count = rsBlock[i * 3 + 0];
+        var totalCount = rsBlock[i * 3 + 1];
+        var dataCount = rsBlock[i * 3 + 2];
+
+        for (var j = 0; j < count; j += 1) {
+          list.push(qrRSBlock(totalCount, dataCount) );
+        }
+      }
+
+      return list;
+    };
+
+    return _this;
+  }();
+
+  //---------------------------------------------------------------------
+  // qrBitBuffer
+  //---------------------------------------------------------------------
+
+  var qrBitBuffer = function() {
+
+    var _buffer = [];
+    var _length = 0;
+
+    var _this = {};
+
+    _this.getBuffer = function() {
+      return _buffer;
+    };
+
+    _this.getAt = function(index) {
+      var bufIndex = Math.floor(index / 8);
+      return ( (_buffer[bufIndex] >>> (7 - index % 8) ) & 1) == 1;
+    };
+
+    _this.put = function(num, length) {
+      for (var i = 0; i < length; i += 1) {
+        _this.putBit( ( (num >>> (length - i - 1) ) & 1) == 1);
+      }
+    };
+
+    _this.getLengthInBits = function() {
+      return _length;
+    };
+
+    _this.putBit = function(bit) {
+
+      var bufIndex = Math.floor(_length / 8);
+      if (_buffer.length <= bufIndex) {
+        _buffer.push(0);
+      }
+
+      if (bit) {
+        _buffer[bufIndex] |= (0x80 >>> (_length % 8) );
+      }
+
+      _length += 1;
+    };
+
+    return _this;
+  };
+
+  //---------------------------------------------------------------------
+  // qrNumber
+  //---------------------------------------------------------------------
+
+  var qrNumber = function(data) {
+
+    var _mode = QRMode.MODE_NUMBER;
+    var _data = data;
+
+    var _this = {};
+
+    _this.getMode = function() {
+      return _mode;
+    };
+
+    _this.getLength = function(buffer) {
+      return _data.length;
+    };
+
+    _this.write = function(buffer) {
+
+      var data = _data;
+
+      var i = 0;
+
+      while (i + 2 < data.length) {
+        buffer.put(strToNum(data.substring(i, i + 3) ), 10);
+        i += 3;
+      }
+
+      if (i < data.length) {
+        if (data.length - i == 1) {
+          buffer.put(strToNum(data.substring(i, i + 1) ), 4);
+        } else if (data.length - i == 2) {
+          buffer.put(strToNum(data.substring(i, i + 2) ), 7);
+        }
+      }
+    };
+
+    var strToNum = function(s) {
+      var num = 0;
+      for (var i = 0; i < s.length; i += 1) {
+        num = num * 10 + chatToNum(s.charAt(i) );
+      }
+      return num;
+    };
+
+    var chatToNum = function(c) {
+      if ('0' <= c && c <= '9') {
+        return c.charCodeAt(0) - '0'.charCodeAt(0);
+      }
+      throw 'illegal char :' + c;
+    };
+
+    return _this;
+  };
+
+  //---------------------------------------------------------------------
+  // qrAlphaNum
+  //---------------------------------------------------------------------
+
+  var qrAlphaNum = function(data) {
+
+    var _mode = QRMode.MODE_ALPHA_NUM;
+    var _data = data;
+
+    var _this = {};
+
+    _this.getMode = function() {
+      return _mode;
+    };
+
+    _this.getLength = function(buffer) {
+      return _data.length;
+    };
+
+    _this.write = function(buffer) {
+
+      var s = _data;
+
+      var i = 0;
+
+      while (i + 1 < s.length) {
+        buffer.put(
+          getCode(s.charAt(i) ) * 45 +
+          getCode(s.charAt(i + 1) ), 11);
+        i += 2;
+      }
+
+      if (i < s.length) {
+        buffer.put(getCode(s.charAt(i) ), 6);
+      }
+    };
+
+    var getCode = function(c) {
+
+      if ('0' <= c && c <= '9') {
+        return c.charCodeAt(0) - '0'.charCodeAt(0);
+      } else if ('A' <= c && c <= 'Z') {
+        return c.charCodeAt(0) - 'A'.charCodeAt(0) + 10;
+      } else {
+        switch (c) {
+        case ' ' : return 36;
+        case '$' : return 37;
+        case '%' : return 38;
+        case '*' : return 39;
+        case '+' : return 40;
+        case '-' : return 41;
+        case '.' : return 42;
+        case '/' : return 43;
+        case ':' : return 44;
+        default :
+          throw 'illegal char :' + c;
+        }
+      }
+    };
+
+    return _this;
+  };
+
+  //---------------------------------------------------------------------
+  // qr8BitByte
+  //---------------------------------------------------------------------
+
+  var qr8BitByte = function(data) {
+
+    var _mode = QRMode.MODE_8BIT_BYTE;
+    var _data = data;
+    var _bytes = qrcode.stringToBytes(data);
+
+    var _this = {};
+
+    _this.getMode = function() {
+      return _mode;
+    };
+
+    _this.getLength = function(buffer) {
+      return _bytes.length;
+    };
+
+    _this.write = function(buffer) {
+      for (var i = 0; i < _bytes.length; i += 1) {
+        buffer.put(_bytes[i], 8);
+      }
+    };
+
+    return _this;
+  };
+
+  //---------------------------------------------------------------------
+  // qrKanji
+  //---------------------------------------------------------------------
+
+  var qrKanji = function(data) {
+
+    var _mode = QRMode.MODE_KANJI;
+    var _data = data;
+
+    var stringToBytes = qrcode.stringToBytesFuncs['SJIS'];
+    if (!stringToBytes) {
+      throw 'sjis not supported.';
+    }
+    !function(c, code) {
+      // self test for sjis support.
+      var test = stringToBytes(c);
+      if (test.length != 2 || ( (test[0] << 8) | test[1]) != code) {
+        throw 'sjis not supported.';
+      }
+    }('\u53cb', 0x9746);
+
+    var _bytes = stringToBytes(data);
+
+    var _this = {};
+
+    _this.getMode = function() {
+      return _mode;
+    };
+
+    _this.getLength = function(buffer) {
+      return ~~(_bytes.length / 2);
+    };
+
+    _this.write = function(buffer) {
+
+      var data = _bytes;
+
+      var i = 0;
+
+      while (i + 1 < data.length) {
+
+        var c = ( (0xff & data[i]) << 8) | (0xff & data[i + 1]);
+
+        if (0x8140 <= c && c <= 0x9FFC) {
+          c -= 0x8140;
+        } else if (0xE040 <= c && c <= 0xEBBF) {
+          c -= 0xC140;
+        } else {
+          throw 'illegal char at ' + (i + 1) + '/' + c;
+        }
+
+        c = ( (c >>> 8) & 0xff) * 0xC0 + (c & 0xff);
+
+        buffer.put(c, 13);
+
+        i += 2;
+      }
+
+      if (i < data.length) {
+        throw 'illegal char at ' + (i + 1);
+      }
+    };
+
+    return _this;
+  };
+
+  //=====================================================================
+  // GIF Support etc.
+  //
+
+  //---------------------------------------------------------------------
+  // byteArrayOutputStream
+  //---------------------------------------------------------------------
+
+  var byteArrayOutputStream = function() {
+
+    var _bytes = [];
+
+    var _this = {};
+
+    _this.writeByte = function(b) {
+      _bytes.push(b & 0xff);
+    };
+
+    _this.writeShort = function(i) {
+      _this.writeByte(i);
+      _this.writeByte(i >>> 8);
+    };
+
+    _this.writeBytes = function(b, off, len) {
+      off = off || 0;
+      len = len || b.length;
+      for (var i = 0; i < len; i += 1) {
+        _this.writeByte(b[i + off]);
+      }
+    };
+
+    _this.writeString = function(s) {
+      for (var i = 0; i < s.length; i += 1) {
+        _this.writeByte(s.charCodeAt(i) );
+      }
+    };
+
+    _this.toByteArray = function() {
+      return _bytes;
+    };
+
+    _this.toString = function() {
+      var s = '';
+      s += '[';
+      for (var i = 0; i < _bytes.length; i += 1) {
+        if (i > 0) {
+          s += ',';
+        }
+        s += _bytes[i];
+      }
+      s += ']';
+      return s;
+    };
+
+    return _this;
+  };
+
+  //---------------------------------------------------------------------
+  // base64EncodeOutputStream
+  //---------------------------------------------------------------------
+
+  var base64EncodeOutputStream = function() {
+
+    var _buffer = 0;
+    var _buflen = 0;
+    var _length = 0;
+    var _base64 = '';
+
+    var _this = {};
+
+    var writeEncoded = function(b) {
+      _base64 += String.fromCharCode(encode(b & 0x3f) );
+    };
+
+    var encode = function(n) {
+      if (n < 0) {
+        // error.
+      } else if (n < 26) {
+        return 0x41 + n;
+      } else if (n < 52) {
+        return 0x61 + (n - 26);
+      } else if (n < 62) {
+        return 0x30 + (n - 52);
+      } else if (n == 62) {
+        return 0x2b;
+      } else if (n == 63) {
+        return 0x2f;
+      }
+      throw 'n:' + n;
+    };
+
+    _this.writeByte = function(n) {
+
+      _buffer = (_buffer << 8) | (n & 0xff);
+      _buflen += 8;
+      _length += 1;
+
+      while (_buflen >= 6) {
+        writeEncoded(_buffer >>> (_buflen - 6) );
+        _buflen -= 6;
+      }
+    };
+
+    _this.flush = function() {
+
+      if (_buflen > 0) {
+        writeEncoded(_buffer << (6 - _buflen) );
+        _buffer = 0;
+        _buflen = 0;
+      }
+
+      if (_length % 3 != 0) {
+        // padding
+        var padlen = 3 - _length % 3;
+        for (var i = 0; i < padlen; i += 1) {
+          _base64 += '=';
+        }
+      }
+    };
+
+    _this.toString = function() {
+      return _base64;
+    };
+
+    return _this;
+  };
+
+  //---------------------------------------------------------------------
+  // base64DecodeInputStream
+  //---------------------------------------------------------------------
+
+  var base64DecodeInputStream = function(str) {
+
+    var _str = str;
+    var _pos = 0;
+    var _buffer = 0;
+    var _buflen = 0;
+
+    var _this = {};
+
+    _this.read = function() {
+
+      while (_buflen < 8) {
+
+        if (_pos >= _str.length) {
+          if (_buflen == 0) {
+            return -1;
+          }
+          throw 'unexpected end of file./' + _buflen;
+        }
+
+        var c = _str.charAt(_pos);
+        _pos += 1;
+
+        if (c == '=') {
+          _buflen = 0;
+          return -1;
+        } else if (c.match(/^\s$/) ) {
+          // ignore if whitespace.
+          continue;
+        }
+
+        _buffer = (_buffer << 6) | decode(c.charCodeAt(0) );
+        _buflen += 6;
+      }
+
+      var n = (_buffer >>> (_buflen - 8) ) & 0xff;
+      _buflen -= 8;
+      return n;
+    };
+
+    var decode = function(c) {
+      if (0x41 <= c && c <= 0x5a) {
+        return c - 0x41;
+      } else if (0x61 <= c && c <= 0x7a) {
+        return c - 0x61 + 26;
+      } else if (0x30 <= c && c <= 0x39) {
+        return c - 0x30 + 52;
+      } else if (c == 0x2b) {
+        return 62;
+      } else if (c == 0x2f) {
+        return 63;
+      } else {
+        throw 'c:' + c;
+      }
+    };
+
+    return _this;
+  };
+
+  //---------------------------------------------------------------------
+  // gifImage (B/W)
+  //---------------------------------------------------------------------
+
+  var gifImage = function(width, height) {
+
+    var _width = width;
+    var _height = height;
+    var _data = new Array(width * height);
+
+    var _this = {};
+
+    _this.setPixel = function(x, y, pixel) {
+      _data[y * _width + x] = pixel;
+    };
+
+    _this.write = function(out) {
+
+      //---------------------------------
+      // GIF Signature
+
+      out.writeString('GIF87a');
+
+      //---------------------------------
+      // Screen Descriptor
+
+      out.writeShort(_width);
+      out.writeShort(_height);
+
+      out.writeByte(0x80); // 2bit
+      out.writeByte(0);
+      out.writeByte(0);
+
+      //---------------------------------
+      // Global Color Map
+
+      // black
+      out.writeByte(0x00);
+      out.writeByte(0x00);
+      out.writeByte(0x00);
+
+      // white
+      out.writeByte(0xff);
+      out.writeByte(0xff);
+      out.writeByte(0xff);
+
+      //---------------------------------
+      // Image Descriptor
+
+      out.writeString(',');
+      out.writeShort(0);
+      out.writeShort(0);
+      out.writeShort(_width);
+      out.writeShort(_height);
+      out.writeByte(0);
+
+      //---------------------------------
+      // Local Color Map
+
+      //---------------------------------
+      // Raster Data
+
+      var lzwMinCodeSize = 2;
+      var raster = getLZWRaster(lzwMinCodeSize);
+
+      out.writeByte(lzwMinCodeSize);
+
+      var offset = 0;
+
+      while (raster.length - offset > 255) {
+        out.writeByte(255);
+        out.writeBytes(raster, offset, 255);
+        offset += 255;
+      }
+
+      out.writeByte(raster.length - offset);
+      out.writeBytes(raster, offset, raster.length - offset);
+      out.writeByte(0x00);
+
+      //---------------------------------
+      // GIF Terminator
+      out.writeString(';');
+    };
+
+    var bitOutputStream = function(out) {
+
+      var _out = out;
+      var _bitLength = 0;
+      var _bitBuffer = 0;
+
+      var _this = {};
+
+      _this.write = function(data, length) {
+
+        if ( (data >>> length) != 0) {
+          throw 'length over';
+        }
+
+        while (_bitLength + length >= 8) {
+          _out.writeByte(0xff & ( (data << _bitLength) | _bitBuffer) );
+          length -= (8 - _bitLength);
+          data >>>= (8 - _bitLength);
+          _bitBuffer = 0;
+          _bitLength = 0;
+        }
+
+        _bitBuffer = (data << _bitLength) | _bitBuffer;
+        _bitLength = _bitLength + length;
+      };
+
+      _this.flush = function() {
+        if (_bitLength > 0) {
+          _out.writeByte(_bitBuffer);
+        }
+      };
+
+      return _this;
+    };
+
+    var getLZWRaster = function(lzwMinCodeSize) {
+
+      var clearCode = 1 << lzwMinCodeSize;
+      var endCode = (1 << lzwMinCodeSize) + 1;
+      var bitLength = lzwMinCodeSize + 1;
+
+      // Setup LZWTable
+      var table = lzwTable();
+
+      for (var i = 0; i < clearCode; i += 1) {
+        table.add(String.fromCharCode(i) );
+      }
+      table.add(String.fromCharCode(clearCode) );
+      table.add(String.fromCharCode(endCode) );
+
+      var byteOut = byteArrayOutputStream();
+      var bitOut = bitOutputStream(byteOut);
+
+      // clear code
+      bitOut.write(clearCode, bitLength);
+
+      var dataIndex = 0;
+
+      var s = String.fromCharCode(_data[dataIndex]);
+      dataIndex += 1;
+
+      while (dataIndex < _data.length) {
+
+        var c = String.fromCharCode(_data[dataIndex]);
+        dataIndex += 1;
+
+        if (table.contains(s + c) ) {
+
+          s = s + c;
+
+        } else {
+
+          bitOut.write(table.indexOf(s), bitLength);
+
+          if (table.size() < 0xfff) {
+
+            if (table.size() == (1 << bitLength) ) {
+              bitLength += 1;
+            }
+
+            table.add(s + c);
+          }
+
+          s = c;
+        }
+      }
+
+      bitOut.write(table.indexOf(s), bitLength);
+
+      // end code
+      bitOut.write(endCode, bitLength);
+
+      bitOut.flush();
+
+      return byteOut.toByteArray();
+    };
+
+    var lzwTable = function() {
+
+      var _map = {};
+      var _size = 0;
+
+      var _this = {};
+
+      _this.add = function(key) {
+        if (_this.contains(key) ) {
+          throw 'dup key:' + key;
+        }
+        _map[key] = _size;
+        _size += 1;
+      };
+
+      _this.size = function() {
+        return _size;
+      };
+
+      _this.indexOf = function(key) {
+        return _map[key];
+      };
+
+      _this.contains = function(key) {
+        return typeof _map[key] != 'undefined';
+      };
+
+      return _this;
+    };
+
+    return _this;
+  };
+
+  var createDataURL = function(width, height, getPixel) {
+    var gif = gifImage(width, height);
+    for (var y = 0; y < height; y += 1) {
+      for (var x = 0; x < width; x += 1) {
+        gif.setPixel(x, y, getPixel(x, y) );
+      }
+    }
+
+    var b = byteArrayOutputStream();
+    gif.write(b);
+
+    var base64 = base64EncodeOutputStream();
+    var bytes = b.toByteArray();
+    for (var i = 0; i < bytes.length; i += 1) {
+      base64.writeByte(bytes[i]);
+    }
+    base64.flush();
+
+    return 'data:image/gif;base64,' + base64;
+  };
+
+  //---------------------------------------------------------------------
+  // returns qrcode function.
+
+  return qrcode;
+}();
+
+// multibyte support
+!function() {
+
+  qrcode.stringToBytesFuncs['UTF-8'] = function(s) {
+    // http://stackoverflow.com/questions/18729405/how-to-convert-utf8-string-to-byte-array
+    function toUTF8Array(str) {
+      var utf8 = [];
+      for (var i=0; i < str.length; i++) {
+        var charcode = str.charCodeAt(i);
+        if (charcode < 0x80) utf8.push(charcode);
+        else if (charcode < 0x800) {
+          utf8.push(0xc0 | (charcode >> 6),
+              0x80 | (charcode & 0x3f));
+        }
+        else if (charcode < 0xd800 || charcode >= 0xe000) {
+          utf8.push(0xe0 | (charcode >> 12),
+              0x80 | ((charcode>>6) & 0x3f),
+              0x80 | (charcode & 0x3f));
+        }
+        // surrogate pair
+        else {
+          i++;
+          // UTF-16 encodes 0x10000-0x10FFFF by
+          // subtracting 0x10000 and splitting the
+          // 20 bits of 0x0-0xFFFFF into two halves
+          charcode = 0x10000 + (((charcode & 0x3ff)<<10)
+            | (str.charCodeAt(i) & 0x3ff));
+          utf8.push(0xf0 | (charcode >>18),
+              0x80 | ((charcode>>12) & 0x3f),
+              0x80 | ((charcode>>6) & 0x3f),
+              0x80 | (charcode & 0x3f));
+        }
+      }
+      return utf8;
+    }
+    return toUTF8Array(s);
+  };
+
+}();
+
+(function (factory) {
+  if (typeof define === 'function' && define.amd) {
+      define([], factory);
+  } else if (typeof exports === 'object') {
+      module.exports = factory();
+  }
+}(function () {
+    return qrcode;
+}));
+
+    </script>
+<script>// ======================== USER CONFIG ========================
+const ENABLE_INSTALL_POPUP = true;
+const ENABLE_SERVICES_TAB = true;
+
+const SERVICES_PACKAGES = [
+  { label: "تک‌لوکیشن",    volume: "15 GB",  days: 30, price: 115000 },
+  { label: "تک‌لوکیشن",    volume: "30 GB",  days: 30, price: 195000, popular: true },
+  { label: "تک‌لوکیشن",    volume: "50 GB",  days: 30, price: 300000 },
+  { label: "تک‌لوکیشن",    volume: "70 GB",  days: 30, price: 385000 },
+  { label: "تک‌لوکیشن",    volume: "100 GB", days: 30, price: 500000 },
+  { label: "مولتی ۲۵ کشور", volume: "10 GB",  days: 30, price: 180000 },
+  { label: "مولتی ۲۵ کشور", volume: "20 GB",  days: 30, price: 320000 },
+  { label: "مولتی ۲۵ کشور", volume: "30 GB",  days: 30, price: 450000 },
+];
+
+// ======================== STATIC NEWS (editable) ========================
+const STATIC_NEWS = [
+  {
+    title: "📢 کاهش قیمت ها",
+    body: "با توجه به جا به جای دیتاسنتر قیمت سرویس ها کاهش یافته",
+    date: "1405-06-05",
+    time: "6:33 PM"
+  }
+];
+
+// ======================== JALALI TO GREGORIAN CONVERTER ========================
+function jalaliToGregorian(jy, jm, jd) {
+  jy = Number(jy); jm = Number(jm); jd = Number(jd);
+  if (jy < 1 || jy > 1500) return null;
+  let dayOfYear = (jm <= 6) ? (jm - 1) * 31 + jd : 186 + (jm - 7) * 30 + jd;
+  let leapYears = 0;
+  for (let y = 1; y < jy; y++) {
+    if ((y % 4 === 0 && y % 100 !== 0) || y % 500 === 0) leapYears++;
+  }
+  const baseJulianDay = 1948320;
+  let totalDays = (jy - 1) * 365 + leapYears + (dayOfYear - 1);
+  let julianDay = baseJulianDay + totalDays;
+  let a = julianDay + 32044;
+  let b = Math.floor((4 * a + 3) / 146097);
+  let c = a - Math.floor((146097 * b) / 4);
+  let d = Math.floor((4 * c + 3) / 1461);
+  let e = c - Math.floor((1461 * d) / 4);
+  let m = Math.floor((5 * e + 2) / 153);
+  let day = e - Math.floor((153 * m + 2) / 5) + 1;
+  let month = m + 3 - 12 * Math.floor(m / 10);
+  let year = 100 * b + d - 4800 + Math.floor(m / 10);
+  return { year, month, day };
+}
+
+function buildIsoDate(jalaliDate, timeStr) {
+  if (!jalaliDate || !timeStr) return null;
+  const parts = jalaliDate.split('-');
+  if (parts.length !== 3) return null;
+  const jy = parseInt(parts[0], 10);
+  const jm = parseInt(parts[1], 10);
+  const jd = parseInt(parts[2], 10);
+  if (isNaN(jy) || isNaN(jm) || isNaN(jd)) return null;
+  const greg = jalaliToGregorian(jy, jm, jd);
+  if (!greg) return null;
+  let hours = 0, minutes = 0;
+  const timeMatch = timeStr.match(/(\d{1,2}):(\d{2})\s*(AM|PM)?/i);
+  if (timeMatch) {
+    hours = parseInt(timeMatch[1], 10);
+    minutes = parseInt(timeMatch[2], 10);
+    const ampm = timeMatch[3] ? timeMatch[3].toUpperCase() : '';
+    if (ampm === 'PM' && hours < 12) hours += 12;
+    if (ampm === 'AM' && hours === 12) hours = 0;
+  }
+  const y = String(greg.year).padStart(4, '0');
+  const m = String(greg.month).padStart(2, '0');
+  const d = String(greg.day).padStart(2, '0');
+  const h = String(hours).padStart(2, '0');
+  const min = String(minutes).padStart(2, '0');
+  return `${y}-${m}-${d}T${h}:${min}:00`;
+}
+
+function normalizeNews(newsArray) {
+  return newsArray.map(item => ({
+    ...item,
+    isoDate: buildIsoDate(item.date, item.time || '00:00') || ''
+  }));
+}
+
+const NORMALIZED_NEWS = normalizeNews(STATIC_NEWS);
+
+// ======================== NOTIFICATION ========================
+const LAST_VISIT_KEY = 'nexus_last_news_visit';
+const NOTIFIED_IDS_KEY = 'nexus_notified_news_ids';
+
+const PWA_ICON_SVG = `<svg xmlns='http://www.w3.org/2000/svg' width='512' height='512' viewBox='0 0 512 512'>
+  <defs><linearGradient id='grad' x1='0%' y1='0%' x2='100%' y2='100%'>
+    <stop offset='0%' stop-color='#40c4a2'/><stop offset='100%' stop-color='#18b2f0'/>
+  </linearGradient></defs>
+  <circle cx='256' cy='256' r='245' fill='url(#grad)'/>
+  <g stroke='#ffffff' fill='none' stroke-width='16' stroke-linecap='round'>
+    <circle cx='256' cy='256' r='155'/>
+    <path d='M 101 256 Q 178 160 256 101'/>
+    <path d='M 411 256 Q 334 160 256 101'/>
+    <path d='M 101 256 Q 178 352 256 411'/>
+    <path d='M 411 256 Q 334 352 256 411'/>
+  </g>
+  <rect x='110' y='190' width='292' height='132' rx='10' fill='#ffffff'/>
+  <text x='256' y='300' font-family='Arial, sans-serif' font-size='130' font-weight='bold' fill='#1ebae1' text-anchor='middle'>VPN</text>
+</svg>`;
+
+const PWA_ICON_URL = `data:image/svg+xml,${encodeURIComponent(PWA_ICON_SVG)}`;
+
+// درخواست اعلان با مدیریت بهتر
+async function requestNotificationPermission(showToastMsg = true) {
+  if (!('Notification' in window)) {
+    if (showToastMsg) showToast(isPersianUI() ? 'مرورگر شما از اعلان پشتیبانی نمی‌کند' : 'Your browser does not support notifications');
+    return false;
+  }
+  if (Notification.permission === 'granted') return true;
+  if (Notification.permission === 'denied') {
+    if (showToastMsg) {
+      showToast(isPersianUI() ? 'دسترسی اعلان رد شده است. لطفاً از طریق تنظیمات مرورگر آن را فعال کنید.' : 'Notification permission denied. Please enable it in browser settings.');
+    }
+    return false;
+  }
+  try {
+    const permission = await Notification.requestPermission();
+    localStorage.setItem('nexus_notif_permission', permission);
+    if (permission === 'granted' && showToastMsg) {
+      showToast(isPersianUI() ? '✅ اعلان‌ها فعال شدند!' : '✅ Notifications enabled!');
+    }
+    return permission === 'granted';
+  } catch (e) {
+    console.warn('Notification request error:', e);
+    return false;
+  }
+}
+
+function sendNotification(newsItem) {
+  if (Notification.permission !== 'granted') return;
+  try {
+    const options = {
+      body: newsItem.body,
+      icon: PWA_ICON_URL,
+      vibrate: [200, 100, 200],
+      data: { url: window.location.href }
+    };
+    const notification = new Notification(newsItem.title, options);
+    notification.onclick = () => {
+      window.focus();
+      window.location.href = notification.data.url;
+      notification.close();
+    };
+  } catch (e) {
+    console.warn('Notification error:', e);
+  }
+}
+
+function checkForNewNews() {
+  const lastVisit = localStorage.getItem(LAST_VISIT_KEY);
+  const now = new Date().toISOString();
+
+  let notifiedIds = [];
+  try {
+    const stored = localStorage.getItem(NOTIFIED_IDS_KEY);
+    if (stored) notifiedIds = JSON.parse(stored);
+  } catch {}
+
+  const newNews = NORMALIZED_NEWS.filter(item => {
+    if (!item.isoDate) return false;
+    const isNew = !lastVisit || new Date(item.isoDate) > new Date(lastVisit);
+    const id = `${item.title}_${item.date}`;
+    const alreadyNotified = notifiedIds.includes(id);
+    return isNew && !alreadyNotified;
+  });
+
+  newNews.forEach(item => {
+    sendNotification(item);
+    const id = `${item.title}_${item.date}`;
+    notifiedIds.push(id);
+  });
+
+  localStorage.setItem(NOTIFIED_IDS_KEY, JSON.stringify(notifiedIds));
+  localStorage.setItem(LAST_VISIT_KEY, now);
+  updateNewsBadge(newNews.length);
+}
+
+function updateNewsBadge(count) {
+  const dot = document.querySelector('.notif-dot');
+  if (dot) {
+    if (count > 0) {
+      dot.style.display = 'flex';
+      dot.textContent = count > 9 ? '9+' : count;
+    } else {
+      dot.style.display = 'none';
+    }
+  }
+}
+
+// شروع پولینگ دوره‌ای برای بررسی اخبار جدید
+function startPeriodicNewsCheck(intervalMs = 60000) {
+  setInterval(() => {
+    checkForNewNews();
+  }, intervalMs);
+
+  document.addEventListener('visibilitychange', () => {
+    if (!document.hidden) {
+      checkForNewNews();
+    }
+  });
+}
+
+// ======================== BACKEND VARIABLES ========================
+const templateVars = {
+  sId: "{{ .sId }}", enabled: "{{ .enabled }}",
+  download: "{{ .download }}", upload: "{{ .upload }}", total: "{{ .total }}", used: "{{ .used }}", remained: "{{ .remained }}",
+  expire: "{{ .expire }}", lastOnline: "{{ .lastOnline }}",
+  downloadByte: "{{ .downloadByte }}", uploadByte: "{{ .uploadByte }}", totalByte: "{{ .totalByte }}",
+  subUrl: "{{ .subUrl }}", subJsonUrl: "{{ .subJsonUrl }}", subClashUrl: "{{ .subClashUrl }}",
+  subTitle: "{{ .subTitle }}", subSupportUrl: "{{ .subSupportUrl }}",
+  links: `{{ range .links }}{{ . }}
+{{ end }}`,
+  emails: `{{ range .emails }}{{ . }}
+{{ end }}`,
+  datepicker: "{{ .datepicker }}", result: "{{ .subUrl }}", jsonUrl: "{{ .subJsonUrl }}", clashUrl: "{{ .subClashUrl }}"
+};
+
+const BYTES_IN_KB = 1024;
+const BYTES_IN_MB = 1024 ** 2;
+const BYTES_IN_GB = 1024 ** 3;
+
+function normalizeDigits(str) {
+  if (typeof str !== 'string') return str;
+  const persian = '۰۱۲۳۴۵۶۷۸۹';
+  const arabic = '٠١٢٣٤٥٦٧٨٩';
+  return str.replace(/[۰-۹]/g, c => persian.indexOf(c)).replace(/[٠-٩]/g, c => arabic.indexOf(c));
+}
+function isPlaceholder(v) { return typeof v === "string" && v.includes("{{") && v.includes("}}"); }
+function normalize(v, fb) { let t = String(v ?? "").trim(); if (!t || isPlaceholder(t)) return fb; return t; }
+function toNumber(v) {
+  let val = normalize(v, "");
+  if (!val) return null;
+  let cleaned = normalizeDigits(val).replace(/[٬,]/g, '').replace(/٫/g, '.');
+  let n = Number(cleaned);
+  return isNaN(n) ? null : n;
+}
+function isUnlimitedText(v) { return /unlimited|infinite|∞|نامحدود/i.test(String(v ?? "")); }
+function parseTrafficToBytes(val) {
+  let text = normalize(val, "");
+  if (!text) return null;
+  if (isUnlimitedText(text)) return 0;
+  let normalizedNum = normalizeDigits(text);
+  let match = normalizedNum.match(/-?\d+(?:\.\d+)?/);
+  if (!match) return null;
+  let amount = parseFloat(match[0]);
+  let multi = 1;
+  if (/tb|ترابایت/i.test(normalizedNum)) multi = 1024**4;
+  else if (/gb|گیگابایت/i.test(normalizedNum)) multi = BYTES_IN_GB;
+  else if (/mb|مگابایت/i.test(normalizedNum)) multi = 1048576;
+  return amount * multi;
+}
+function parseExpireIso(exp) {
+  let ts = toNumber(exp);
+  if (ts === null || ts === 0) return null;
+  let ms = ts < 1e12 ? ts * 1000 : ts;
+  let d = new Date(ms);
+  return isNaN(d.getTime()) ? null : d.toISOString();
+}
+function parseEmails(raw) {
+  let txt = normalize(raw, "");
+  if (!txt) return [];
+  if (txt.startsWith("[") && txt.endsWith("]")) try { let arr = JSON.parse(txt); return Array.isArray(arr) ? arr : []; } catch(e) {}
+  let items = txt.split(/[,\s]+/).filter(Boolean);
+  return [...new Set(items)];
+}
+function parseLinks(raw) {
+  let txt = normalize(raw, "");
+  return txt ? txt.split(/\r?\n/).filter(l => l.trim()) : [];
+}
+// ======================== WIREGUARD PARSER ========================
+function parseWireGuardLink(link) {
+  try {
+    const url = new URL(link);
+    if (url.protocol !== 'wireguard:') return null;
+
+    const privateKey = decodeURIComponent(url.username || '');
+    const host = url.hostname;
+    const port = url.port || '51820';
+    const searchParams = url.searchParams;
+    const address = searchParams.get('address') || '';
+    const mtu = searchParams.get('mtu') || '1420';
+    const publicKey = searchParams.get('publickey') || '';
+    
+    let name = '';
+    if (url.hash) {
+      const fragment = decodeURIComponent(url.hash.substring(1));
+      const parts = fragment.split('|');
+      name = parts.length > 1 ? parts[1] : parts[0];
+    }
+    if (!name) name = 'WireGuard-Config';
+
+    return { privateKey, host, port, address, mtu, publicKey, name };
+  } catch (e) {
+    return null;
+  }
+}
+
+function generateWireGuardConfig(parsed) {
+  if (!parsed) return '';
+  const { privateKey, host, port, address, mtu, publicKey, name } = parsed;
+  const config = `[Interface]
+PrivateKey = ${privateKey}
+Address = ${address}
+DNS = 1.1.1.1, 1.0.0.1
+MTU = ${mtu}
+
+# ${name}
+[Peer]
+PublicKey = ${publicKey}
+AllowedIPs = 0.0.0.0/0, ::/0
+Endpoint = ${host}:${port}`;
+  return config;
+}
+
+let totalByteNum = toNumber(templateVars.totalByte) ?? parseTrafficToBytes(templateVars.total);
+let uploadByteNum = toNumber(templateVars.uploadByte) ?? parseTrafficToBytes(templateVars.upload);
+let downloadByteNum = toNumber(templateVars.downloadByte) ?? parseTrafficToBytes(templateVars.download);
+if (uploadByteNum === null) uploadByteNum = 0;
+if (downloadByteNum === null) downloadByteNum = 0;
+let usedBytes = (isNaN(uploadByteNum) ? 0 : uploadByteNum) + (isNaN(downloadByteNum) ? 0 : downloadByteNum);
+let isDataUnlimited = (totalByteNum !== null && totalByteNum <= 0) || isUnlimitedText(templateVars.total);
+let totalGB = (totalByteNum !== null && totalByteNum > 0) ? totalByteNum / BYTES_IN_GB : 0;
+let usedGB = usedBytes / BYTES_IN_GB;
+let remainGB = (!isDataUnlimited && totalGB > 0) ? Math.max(0, totalGB - usedGB) : 0;
+let subLink = normalize(templateVars.subUrl, "") || normalize(templateVars.result, "") || "";
+let emailsList = parseEmails(templateVars.emails);
+let configsList = parseLinks(templateVars.links);
+let expireISO = parseExpireIso(templateVars.expire);
+let isEnabled = String(templateVars.enabled).toLowerCase() !== "false";
+
+const locales = {
+  fa: { used: "مصرف شده", usage: "مصرف", total: "کل حجم", remain: "باقی‌مانده", expiry: "انقضا", days: "روز", hours: "ساعت", minutes: "دقیقه", copy: "کپی لینک اشتراک", qr: "نمایش QR", active: "فعال", inactive: "غیرفعال", unlimited: "نامحدود", copyDone: "کپی شد!", copyFail: "خطا", download: "دریافت", upload: "ارسال", configTitle: "کانفیگ‌ها", appsTitle: "برنامه‌های پیشنهادی", noConfig: "کانفیگی موجود نیست", lastOnline: "آخرین آنلاین", timeExpired: "منقضی شده", timeUnlimited: "نامحدود", remainTime: "زمان باقیمانده", subscriptionHub: "پنل اشتراک", volumeUnit: "گیگابایت", copyAll: "کپی همه", noConfigToCopy: "کانفیگی برای کپی وجود ندارد", greeting: "خوش آمدید", premium: "اشتراک ویژه", status: "وضعیت", remainDays: "روز باقی‌مانده", remainVol: "حجم باقی‌مانده", navHome: "خانه", navStatus: "وضعیت", navConfig: "کانفیگ", navApps: "برنامه‌ها", chartTitle: "مصرف ۷ روز اخیر", chartFrom: "از ", chartTo: "تا امروز", navServices: "خدمات", servicesTitle: "خدمات و بسته‌ها" },
+  en: { used: "Used", usage: "Usage", total: "Total", remain: "Remaining", expiry: "Expiry", days: "Days", hours: "Hours", minutes: "Mins", copy: "Copy Subscription", qr: "Show QR", active: "Active", inactive: "Inactive", unlimited: "Unlimited", copyDone: "Copied!", copyFail: "Failed", download: "Download", upload: "Upload", configTitle: "Configs", appsTitle: "Client Apps", noConfig: "No configs available", lastOnline: "Last online", timeExpired: "Expired", timeUnlimited: "No limit", remainTime: "Remaining time", subscriptionHub: "Subscription Hub", volumeUnit: "GB", copyAll: "Copy All", noConfigToCopy: "No configs to copy", greeting: "Welcome back", premium: "Premium Access", status: "Status", remainDays: "Days left", remainVol: "Data left", navHome: "Home", navStatus: "Status", navConfig: "Config", navApps: "Apps", chartTitle: "Usage — last 7 days", chartFrom: "From ", chartTo: "To Today", navServices: "Services", servicesTitle: "Plans & Pricing" }
+};
+let currentLang = localStorage.getItem("nexus_lang") || "fa";
+let isDark = (localStorage.getItem("nexus_theme") || "dark") !== "light";
+let countdownInterval = null;
+
+function t(key) { return locales[currentLang][key] || key; }
+function volumeUnit() { return t("volumeUnit"); }
+function volumeUnitByBytes(bytes) {
+  const n = Number(bytes);
+  const safeBytes = Number.isFinite(n) && n > 0 ? n : 0;
+  if (isPersianUI()) {
+    if (safeBytes < BYTES_IN_KB) return "بایت";
+    if (safeBytes < BYTES_IN_MB) return "کیلوبایت";
+    if (safeBytes < BYTES_IN_GB) return "مگابایت";
+    return "گیگابایت";
+  }
+  if (safeBytes < BYTES_IN_KB) return "B";
+  if (safeBytes < BYTES_IN_MB) return "KB";
+  if (safeBytes < BYTES_IN_GB) return "MB";
+  return "GB";
+}
+function formatBytesParts(bytes, digits = 1) {
+  const n = Number(bytes);
+  const safeBytes = Number.isFinite(n) && n > 0 ? n : 0;
+  let value = safeBytes;
+  if (safeBytes < BYTES_IN_KB) value = safeBytes;
+  else if (safeBytes < BYTES_IN_MB) value = safeBytes / BYTES_IN_KB;
+  else if (safeBytes < BYTES_IN_GB) value = safeBytes / BYTES_IN_MB;
+  else value = safeBytes / BYTES_IN_GB;
+  return { value: formatFixed(value, digits), unit: volumeUnitByBytes(safeBytes) };
+}
+function formatBytes(bytes, digits = 1) {
+  const parts = formatBytesParts(bytes, digits);
+  return `${parts.value} ${parts.unit}`;
+}
+function setVolumeStat(valueId, unitId, bytes, digits = 1) {
+  const valueEl = document.getElementById(valueId);
+  if (!valueEl) return;
+  const parts = formatBytesParts(bytes, digits);
+  valueEl.innerText = parts.value;
+  const unitEl = unitId ? document.getElementById(unitId) : valueEl.parentElement?.querySelector(".stat-unit");
+  if (unitEl) unitEl.innerText = parts.unit;
+}
+function toFaDigits(value) { return String(value ?? "").replace(/\d/g, d => "۰۱۲۳۴۵۶۷۸۹"[d]); }
+function formatDisplay(value) { return isPersianUI() ? toFaDigits(value) : String(value ?? ""); }
+function formatFixed(value, digits = 1) {
+  const n = Number(value);
+  if (!Number.isFinite(n)) return formatDisplay("0");
+  const rounded = Number(n.toFixed(digits));
+  const text = Number.isInteger(rounded) ? String(rounded) : rounded.toFixed(digits).replace(/0+$/, "").replace(/\.$/, "");
+  return formatDisplay(text);
+}
+function formatInteger(value) {
+  const n = Number(value);
+  if (!Number.isFinite(n)) return isPersianUI() ? "۰" : "0";
+  return formatDisplay(Math.floor(n));
+}
+function isPersianUI() { return currentLang === "fa" || document.documentElement.getAttribute("dir") === "rtl"; }
+
+function parseSafeTimestamp(raw) {
+  const valOriginal = normalize(raw, "");
+  if (!valOriginal) return null;
+  const val = normalizeDigits(valOriginal).trim();
+  if (!val || /^(0|-1|null|undefined|never|none|نامشخص|هیچ)$/i.test(val)) return null;
+  if (/^\d{2,5}\s*[\/-]\s*\d{1,2}\s*[\/-]\s*\d{1,2}/.test(val)) return null;
+  const match = val.match(/-?\d+(?:\.\d+)?/);
+  if (!match) return null;
+  const n = Number(match[0]);
+  if (!Number.isFinite(n) || n <= 0) return null;
+  const now = Date.now();
+  const candidates = [];
+  const add = (ms) => {
+    if (!Number.isFinite(ms) || ms <= 0) return;
+    const d = new Date(ms);
+    if (isNaN(d.getTime())) return;
+    const y = d.getFullYear();
+    if (y >= 2000 && y <= 2100) candidates.push({ date: d, score: Math.abs(ms - now) });
+  };
+  add(n); add(n * 1000); add(n / 10); add(n / 100); add(n / 1000);
+  add(n / 10000); add(n / 100000); add(n / 1000000); add(n / 1000000000);
+  if (!candidates.length) return null;
+  candidates.sort((a, b) => a.score - b.score);
+  return candidates[0].date;
+}
+function pad2(value) { return String(value).padStart(2, "0"); }
+function gregorianToJalali(gy, gm, gd) {
+  const gDm = [0,31,59,90,120,151,181,212,243,273,304,334];
+  let jy = (gy <= 1600) ? 0 : 979;
+  gy -= (gy <= 1600) ? 621 : 1600;
+  const gy2 = (gm > 2) ? (gy + 1) : gy;
+  let days = 365 * gy + Math.floor((gy2 + 3) / 4) - Math.floor((gy2 + 99) / 100) + Math.floor((gy2 + 399) / 400) - 80 + gd + gDm[gm - 1];
+  jy += 33 * Math.floor(days / 12053);
+  days %= 12053;
+  jy += 4 * Math.floor(days / 1461);
+  days %= 1461;
+  if (days > 365) { jy += Math.floor((days - 1) / 365); days = (days - 1) % 365; }
+  const jm = (days < 186) ? 1 + Math.floor(days / 31) : 7 + Math.floor((days - 186) / 30);
+  const jd = 1 + ((days < 186) ? (days % 31) : ((days - 186) % 30));
+  return [jy, jm, jd];
+}
+function formatDateTime(date) {
+  if (!date || isNaN(date.getTime())) return "";
+  if (isPersianUI()) {
+    const [jy, jm, jd] = gregorianToJalali(date.getFullYear(), date.getMonth() + 1, date.getDate());
+    return toFaDigits(`${jy}/${pad2(jm)}/${pad2(jd)}، ${pad2(date.getHours())}:${pad2(date.getMinutes())}:${pad2(date.getSeconds())}`);
+  }
+  return `${date.getFullYear()}/${pad2(date.getMonth() + 1)}/${pad2(date.getDate())}, ${pad2(date.getHours())}:${pad2(date.getMinutes())}:${pad2(date.getSeconds())}`;
+}
+function formatDateOnly(date) {
+  if (!date || isNaN(date.getTime())) return "";
+  if (isPersianUI()) {
+    const [jy, jm, jd] = gregorianToJalali(date.getFullYear(), date.getMonth() + 1, date.getDate());
+    return toFaDigits(`${jy}/${pad2(jm)}/${pad2(jd)}`);
+  }
+  return `${date.getFullYear()}/${pad2(date.getMonth() + 1)}/${pad2(date.getDate())}`;
+}
+function normalizeFormattedDateText(raw) {
+  const valOriginal = normalize(raw, "");
+  if (!valOriginal) return "";
+  const val = normalizeDigits(valOriginal).trim();
+  const m = val.match(/^(\d{2,5})\s*([\/-])\s*(\d{1,2})\s*\2\s*(\d{1,2})(.*)$/);
+  if (!m) return "";
+  const y = Number(m[1]);
+  if ((y >= 1200 && y <= 1700) || (y >= 1900 && y <= 2100)) {
+    return isPersianUI() ? toFaDigits(val) : val;
+  }
+  return "";
+}
+function renderLastOnline() {
+  const box = document.getElementById("lastOnlineInfo");
+  const parsed = parseSafeTimestamp(templateVars.lastOnline);
+  const formattedRaw = normalizeFormattedDateText(templateVars.lastOnline);
+  const finalText = parsed ? formatDateTime(parsed) : formattedRaw;
+  box.innerHTML = finalText ? `<i class="fa-regular fa-eye"></i> ${t("lastOnline")}: ${finalText}` : "";
+}
+
+// DOM helpers
+function showToast(msg) { let toast = document.getElementById("toastMessage"); toast.innerText = msg; toast.classList.add("show"); setTimeout(() => toast.classList.remove("show"), 1700); }
+function showQR(data, title, label) {
+  if (!data) { showToast(t("copyFail")); return; }
+  document.getElementById("modalQrTitle").innerText = title;
+  try {
+    const qrGen = qrcode(0, "M"); qrGen.addData(data); qrGen.make();
+    document.getElementById("qrModalImg").src = qrGen.createDataURL(6, 8);
+  } catch (e) { document.getElementById("qrModalImg").src = ""; }
+  document.getElementById("qrModalText").innerText = label || data;
+  document.getElementById("qrModal").classList.add("show");
+}
+function closeModal() { document.getElementById("qrModal").classList.remove("show"); }
+async function copyText(text, successMsg) {
+  if (!text) { showToast(t("copyFail")); return; }
+  try {
+    await navigator.clipboard.writeText(text);
+    showToast(successMsg);
+  } catch(e) {
+    try {
+      const ta = document.createElement("textarea");
+      ta.value = text;
+      ta.style.position = "fixed";
+      ta.style.opacity = "0";
+      document.body.appendChild(ta);
+      ta.select();
+      document.execCommand("copy");
+      document.body.removeChild(ta);
+      showToast(successMsg);
+    } catch(e2) {
+      showToast(t("copyFail"));
+    }
+  }
+}
+function escapeHtml(str) { return String(str).replace(/[&<>"']/g, function(m){if(m==='&') return '&amp;'; if(m==='<') return '&lt;'; if(m==='>') return '&gt;'; if(m==='"') return '&quot;'; if(m==="'") return '&#39;'; return m;}); }
+
+// ======================== NEWS RENDERING ========================
+function fetchNews() {
+  const container = document.getElementById('newsContent');
+  if (NORMALIZED_NEWS && NORMALIZED_NEWS.length > 0) {
+    container.innerHTML = NORMALIZED_NEWS.map(item => 
+      `<div style="padding:0.6rem 0; border-bottom:1px solid var(--border);">
+        <strong style="color:var(--text-primary);">${escapeHtml(item.title || '')}</strong>
+        <p style="font-size:0.85rem; color:var(--text-secondary); margin-top:0.2rem;">${escapeHtml(item.body || '')}</p>
+        <small style="color:var(--text-muted);">${escapeHtml(item.date || '')} ${item.time ? ' - ' + escapeHtml(item.time) : ''}</small>
+      </div>`
+    ).join('');
+  } else {
+    container.innerHTML = '<p style="color:var(--text-secondary); text-align:center;">No news available.</p>';
+  }
+}
+
+function showNewsModal() {
+  document.getElementById('newsModal').classList.add('show');
+  fetchNews();
+  updateNewsBadge(0);
+  localStorage.setItem(NOTIFIED_IDS_KEY, JSON.stringify([]));
+}
+
+function closeNewsModal() {
+  document.getElementById('newsModal').classList.remove('show');
+}
+
+// ======================== LIQUID BUBBLE ========================
+let liquidAnimationId = null;
+let targetLiquidPercent = 0;
+let wavePhase = 0;
+let liquidCtx = null;
+let liquidCanvas = null;
+
+function getUsageColor(percent, unlimited = false) {
+  if (unlimited) return "#4f9bff";
+  const p = Math.max(0, Math.min(100, percent));
+  let r, g, b;
+  if (p <= 40) {
+    const k = p / 40;
+    r = Math.round(134 - (134 - 34) * k);
+    g = Math.round(239 - (239 - 197) * k);
+    b = Math.round(172 - (172 - 94) * k);
+  } else if (p <= 60) {
+    const k = (p - 40) / 20;
+    r = Math.round(34 + (249 - 34) * k);
+    g = Math.round(197 - (197 - 115) * k);
+    b = Math.round(94 - (94 - 22) * k);
+  } else {
+    const k = (p - 60) / 40;
+    r = Math.round(249 + (239 - 249) * k);
+    g = Math.round(115 - (115 - 68) * k);
+    b = Math.round(22 - (22 - 68) * k);
+  }
+  return `rgb(${r}, ${g}, ${b})`;
+}
+
+function resizeLiquidCanvas() {
+  if (!liquidCanvas) return;
+  const wrap = liquidCanvas.parentElement;
+  if (!wrap) return;
+  const rect = wrap.getBoundingClientRect();
+  const cssSize = Math.max(1, Math.round(Math.min(rect.width, rect.height)));
+  const dpr = Math.min(window.devicePixelRatio || 1, 2);
+  const pixelSize = Math.round(cssSize * dpr);
+  if (liquidCanvas.width !== pixelSize || liquidCanvas.height !== pixelSize) {
+    liquidCanvas.width = pixelSize;
+    liquidCanvas.height = pixelSize;
+  }
+}
+
+function drawLiquidBubble() {
+  if (!liquidCtx || !liquidCanvas) return;
+  const size = liquidCanvas.width;
+  const center = size / 2;
+  const radius = size / 2 - Math.max(6, size * 0.065);
+  const unlimitedMode = isDataUnlimited || totalGB <= 0;
+  const percentToShow = unlimitedMode ? 100 : targetLiquidPercent;
+  const fillColor = getUsageColor(percentToShow, unlimitedMode);
+  const fillHeight = (percentToShow / 100) * (radius * 2);
+  const startY = size - fillHeight - (size / 2 - radius);
+
+  liquidCtx.clearRect(0, 0, size, size);
+  liquidCtx.beginPath();
+  liquidCtx.arc(center, center, radius, 0, Math.PI * 2);
+  liquidCtx.fillStyle = "rgba(255,255,255,0.06)";
+  liquidCtx.fill();
+
+  liquidCtx.save();
+  liquidCtx.beginPath();
+  liquidCtx.arc(center, center, radius, 0, Math.PI * 2);
+  liquidCtx.clip();
+
+  liquidCtx.fillStyle = fillColor;
+  liquidCtx.beginPath();
+  liquidCtx.moveTo(0, size);
+  const waveAmp = size * 0.027;
+  const waveLen = size * 0.118;
+  for (let x = 0; x <= size; x++) {
+    const y = startY + Math.sin((x / waveLen) + wavePhase) * waveAmp;
+    liquidCtx.lineTo(x, y);
+  }
+  liquidCtx.lineTo(size, size);
+  liquidCtx.closePath();
+  liquidCtx.fill();
+  liquidCtx.restore();
+
+  liquidCtx.beginPath();
+  liquidCtx.arc(center, center, radius, 0, Math.PI * 2);
+  liquidCtx.strokeStyle = fillColor;
+  liquidCtx.globalAlpha = 0.55;
+  liquidCtx.lineWidth = Math.max(2, size * 0.014);
+  liquidCtx.stroke();
+  liquidCtx.globalAlpha = 1;
+
+  wavePhase += 0.08;
+  liquidAnimationId = requestAnimationFrame(drawLiquidBubble);
+}
+
+function initLiquidBubble() {
+  liquidCanvas = document.getElementById("liquidBubbleCanvas");
+  if (!liquidCanvas) return;
+  liquidCtx = liquidCanvas.getContext("2d");
+  resizeLiquidCanvas();
+  if (!liquidAnimationId) drawLiquidBubble();
+  if ("ResizeObserver" in window && !liquidCanvas._ro) {
+    const ro = new ResizeObserver(() => resizeLiquidCanvas());
+    ro.observe(liquidCanvas.parentElement);
+    liquidCanvas._ro = ro;
+  }
+}
+
+function setLiquidPercent(percent, unlimitedFlag) {
+  targetLiquidPercent = unlimitedFlag ? 100 : Math.min(100, Math.max(0, percent));
+  const ringText = document.getElementById("ringPercentText");
+  const ringLabel = document.getElementById("ringUsageLabel");
+  if (unlimitedFlag) {
+    ringText.innerHTML = "∞";
+  } else {
+    ringText.innerHTML = formatInteger(targetLiquidPercent) + "%";
+  }
+  ringText.style.color = "#ffffff";
+  ringLabel.style.color = "#ffffff";
+}
+
+// ======================== 7-DAY SPARKLINE CHART ========================
+let activeChartDot = null;
+
+function hideChartTooltip() {
+  const tooltip = document.getElementById("chartTooltip");
+  const guideLine = document.getElementById("chartGuideLine");
+  if (tooltip) tooltip.style.display = "none";
+  if (guideLine) guideLine.style.display = "none";
+  if (activeChartDot) { activeChartDot.classList.remove("is-active"); activeChartDot = null; }
+}
+
+function drawInteractiveSparkline() {
+  const container = document.getElementById("interactiveChartContainer");
+  if (!container) return;
+
+  const totalUsedGB = usedBytes / BYTES_IN_GB;
+  const unlimitedMode = isDataUnlimited || totalGB <= 0;
+  const dailyWeights = [0.08, 0.12, 0.15, 0.11, 0.18, 0.22, 0.14];
+  const dailyUsageGB = dailyWeights.map(w => totalUsedGB * w);
+  const dailyPercent = dailyUsageGB.map(gb => (totalGB > 0) ? (gb / totalGB) * 100 : 0);
+
+  const daysData = [];
+  for (let i = 6; i >= 0; i--) {
+    const d = new Date();
+    d.setDate(d.getDate() - i);
+    daysData.push({
+      date: d,
+      usageGB: dailyUsageGB[6 - i],
+      percent: dailyPercent[6 - i]
+    });
+  }
+
+  document.getElementById("chartStartDateLabel").innerText = t("chartFrom") + formatDateOnly(daysData[0].date);
+  document.getElementById("chartEndDateLabel").innerText = t("chartTo") + formatDateOnly(daysData[6].date);
+
+  let maxVal;
+  if (unlimitedMode) {
+    maxVal = Math.max(...dailyUsageGB, 0.5);
+  } else {
+    maxVal = Math.max(...dailyPercent, 0.5);
+  }
+  const heightMultiplier = 16 / maxVal;
+
+  const points = daysData.map((d, index) => {
+    const x = 4 + index * (92 / 6);
+    let y;
+    if (unlimitedMode) {
+      y = 22 - (d.usageGB * heightMultiplier);
+    } else {
+      y = 22 - (d.percent * heightMultiplier);
+    }
+    return { x, y, data: d };
+  });
+
+  let lineD = `M ${points[0].x} ${points[0].y}`;
+  let areaD = `M ${points[0].x} 25 L ${points[0].x} ${points[0].y}`;
+  for (let i = 1; i < points.length; i++) {
+    lineD += ` L ${points[i].x} ${points[i].y}`;
+    areaD += ` L ${points[i].x} ${points[i].y}`;
+  }
+  areaD += ` L ${points[points.length - 1].x} 25 Z`;
+
+  document.getElementById("chartLinePath").setAttribute("d", lineD);
+  document.getElementById("chartAreaPath").setAttribute("d", areaD);
+
+  const dotsLayer = document.getElementById("chartDotsLayer");
+  dotsLayer.innerHTML = "";
+  const guideLine = document.getElementById("chartGuideLine");
+  const tooltip = document.getElementById("chartTooltip");
+  const wrap = document.getElementById("chartWrap");
+
+  hideChartTooltip();
+
+  points.forEach((pt) => {
+    const leftPct = pt.x;
+    const topPct = (pt.y / 25) * 100;
+
+    const dot = document.createElement("div");
+    dot.className = "chart-dot";
+    dot.style.left = leftPct + "%";
+    dot.style.top = topPct + "%";
+
+    const hit = document.createElement("button");
+    hit.type = "button";
+    hit.className = "chart-hit";
+    hit.style.left = leftPct + "%";
+    hit.setAttribute("aria-label", formatDateOnly(pt.data.date));
+
+    const showTooltip = () => {
+      hideChartTooltip();
+      activeChartDot = dot;
+      dot.classList.add("is-active");
+
+      guideLine.style.display = "block";
+      guideLine.style.left = leftPct + "%";
+
+      const rect = wrap.getBoundingClientRect();
+      const rawX = (leftPct / 100) * rect.width;
+      const rawY = (topPct / 100) * rect.height;
+
+      tooltip.style.display = "flex";
+      const dateStr = formatDateOnly(pt.data.date);
+      let usageStr;
+      if (unlimitedMode) {
+        usageStr = formatFixed(pt.data.usageGB, 2) + " " + (isPersianUI() ? "گیگابایت" : "GB");
+      } else {
+        usageStr = formatFixed(pt.data.percent, 1) + "%";
+      }
+      tooltip.innerHTML = `<strong>${dateStr}</strong><span>${usageStr}</span>`;
+
+      const tw = tooltip.offsetWidth || 120;
+      const clampedX = Math.min(Math.max(rawX, tw / 2 + 4), rect.width - tw / 2 - 4);
+      const th = tooltip.offsetHeight || 44;
+      const above = rawY - th - 12;
+      tooltip.style.left = clampedX + "px";
+      tooltip.style.top = (above > 0 ? above : rawY + 14) + "px";
+      tooltip.style.transform = "translateX(-50%)";
+    };
+
+    hit.addEventListener("mouseenter", showTooltip);
+    hit.addEventListener("mouseleave", hideChartTooltip);
+    hit.addEventListener("focus", showTooltip);
+    hit.addEventListener("blur", hideChartTooltip);
+    hit.addEventListener("click", (e) => { e.stopPropagation(); showTooltip(); });
+    hit.addEventListener("touchstart", (e) => { e.preventDefault(); e.stopPropagation(); showTooltip(); }, { passive: false });
+
+    dotsLayer.appendChild(hit);
+    dotsLayer.appendChild(dot);
+  });
+}
+document.addEventListener("touchstart", (e) => {
+  if (!e.target.closest || !e.target.closest("#chartWrap")) hideChartTooltip();
+}, { passive: true });
+
+// ======================== RENDER FUNCTIONS ========================
+function computeIsActive(unlimitedFlag) {
+  return isEnabled && (!expireISO || new Date(expireISO) > new Date()) && (!(!unlimitedFlag && usedGB >= totalGB && totalGB > 0));
+}
+
+function renderStatsAndRing() {
+  let unlimitedFlag = isDataUnlimited || totalGB <= 0;
+  let usedPercent = (!unlimitedFlag && totalGB > 0) ? Math.min(100, Math.max(0, (usedGB / totalGB) * 100)) : 0;
+  let remainBytes = (!unlimitedFlag && totalByteNum !== null && totalByteNum > 0) ? Math.max(0, totalByteNum - usedBytes) : 0;
+
+  setVolumeStat("usedStatValue", "usedUnit", usedBytes, 1);
+  if (unlimitedFlag) {
+    document.getElementById("totalStatValue").innerHTML = "∞";
+    document.getElementById("remainStatValue").innerHTML = "∞";
+  } else {
+    setVolumeStat("totalStatValue", null, totalByteNum || 0, 1);
+    setVolumeStat("remainStatValue", null, remainBytes, 1);
+  }
+  setLiquidPercent(usedPercent, unlimitedFlag);
+
+  document.getElementById("downloadVal").innerHTML = formatBytes(downloadByteNum || 0, 1);
+  document.getElementById("uploadVal").innerHTML = formatBytes(uploadByteNum || 0, 1);
+  document.getElementById("downloadLabel").innerText = t("download");
+  document.getElementById("uploadLabel").innerText = t("upload");
+
+  let isActive = computeIsActive(unlimitedFlag);
+  let statusSpan = document.getElementById("statusChip");
+  statusSpan.innerHTML = `<i class="fa-solid ${isActive ? 'fa-circle-check' : 'fa-circle-xmark'}"></i> ${isActive ? t("active") : t("inactive")}`;
+  statusSpan.classList.toggle("is-inactive", !isActive);
+
+  if (expireISO && new Date(expireISO) > new Date())
+    document.getElementById("expiryDatePreview").innerText = formatDateOnly(new Date(expireISO));
+  else if (!expireISO)
+    document.getElementById("expiryDatePreview").innerText = t("timeUnlimited");
+  else
+    document.getElementById("expiryDatePreview").innerText = t("timeExpired");
+
+  drawInteractiveSparkline();
+}
+
+function renderExpiryCountdown() {
+  if (countdownInterval) clearInterval(countdownInterval);
+  if (!expireISO) {
+    document.getElementById("daysLeft").innerText = "∞";
+    document.getElementById("hoursLeft").innerText = "∞";
+    document.getElementById("minutesLeft").innerText = "∞";
+    document.getElementById("expiryTextLabel").innerText = isPersianUI() ? "اشتراک شما محدودیت زمانی ندارد" : "Your subscription has no time limit";
+    renderLastOnline();
+    return;
+  }
+  let end = new Date(expireISO).getTime();
+  const tick = () => {
+    let now = Date.now();
+    let diff = Math.max(0, end - now);
+    let days = Math.floor(diff / 86400000);
+    let hours = Math.floor((diff % 86400000) / 3600000);
+    let mins = Math.floor((diff % 3600000) / 60000);
+    document.getElementById("daysLeft").innerText = formatDisplay(days);
+    document.getElementById("hoursLeft").innerText = formatDisplay(hours);
+    document.getElementById("minutesLeft").innerText = formatDisplay(mins);
+    if (diff <= 0) clearInterval(countdownInterval);
+  };
+  tick();
+  countdownInterval = setInterval(tick, 1000);
+  document.getElementById("expiryTextLabel").innerText = t("remainTime");
+  renderLastOnline();
+}
+
+function renderHome() {
+  let unlimitedFlag = isDataUnlimited || totalGB <= 0;
+  let isActive = computeIsActive(unlimitedFlag);
+  document.getElementById("heroTitle").innerText = getPanelTitle();
+  let name = (emailsList && emailsList.length > 0) ? emailsList[0] : "";
+  document.getElementById("heroGreeting").innerText = name ? `${t("greeting")}،` : t("greeting");
+
+  let sv = document.getElementById("homeStatusValue");
+  sv.innerText = isActive ? t("active") : t("inactive");
+  sv.style.color = isActive ? "var(--status-active-text)" : "var(--status-inactive-text)";
+
+  let daysEl = document.getElementById("homeDaysValue");
+  if (!expireISO) { daysEl.innerText = "∞"; }
+  else {
+    let diff = Math.max(0, new Date(expireISO).getTime() - Date.now());
+    daysEl.innerText = formatDisplay(Math.floor(diff / 86400000));
+  }
+
+  let volEl = document.getElementById("homeVolumeValue");
+  if (unlimitedFlag) { volEl.innerText = "∞"; }
+  else {
+    let remainBytes = (totalByteNum !== null && totalByteNum > 0) ? Math.max(0, totalByteNum - usedBytes) : 0;
+    volEl.innerHTML = formatBytes(remainBytes, 1);
+  }
+}
+
+function renderConfigs() {
+  let container = document.getElementById("configListContainer");
+  if (!configsList.length) {
+    container.innerHTML = `<div style="text-align:center;padding:2rem;">${t("noConfig")}</div>`;
+    document.getElementById("configCountBadge").innerText = formatDisplay(0);
+    return;
+  }
+  document.getElementById("configCountBadge").innerText = formatDisplay(configsList.length);
+  container.innerHTML = "";
+
+  configsList.forEach((cfg, idx) => {
+    const isWireGuard = cfg.startsWith('wireguard://');
+    const isTelegram = cfg.startsWith('tg://');
+    let name = "";
+
+    if (isTelegram) {
+      name = "Telegram";
+    } else if (cfg.includes("#")) {
+      name = decodeURIComponent(cfg.split("#").pop().replace(/\+/g, " "));
+    } else {
+      name = `${t("configTitle")} ${formatDisplay(idx+1)}`;
+    }
+
+    const div = document.createElement("div");
+    div.className = "config-item";
+
+    if (isWireGuard) {
+      const parsed = parseWireGuardLink(cfg);
+      if (!parsed) {
+        div.innerHTML = buildConfigItemFallback(cfg, name);
+        container.appendChild(div);
+        return;
+      }
+      const configText = generateWireGuardConfig(parsed);
+      const fileName = `WireGuard-${parsed.name.replace(/\s+/g, '-')}.conf`;
+
+      div.innerHTML = `
+        <div class="config-meta">
+          <span class="config-name">${escapeHtml(name)}</span>
+          <div class="config-actions">
+            <button type="button" class="mini-action copyConfigBtn" aria-label="Copy"><i class="fa-regular fa-copy"></i></button>
+            <button type="button" class="mini-action qrConfigBtn" data-name="${escapeHtml(name)}" aria-label="QR"><i class="fa-solid fa-qrcode"></i></button>
+            <button type="button" class="mini-action downloadConfigBtn" aria-label="Download"><i class="fa-solid fa-download"></i></button>
+          </div>
+        </div>
+        <pre class="config-link" style="white-space:pre-wrap;word-break:break-all;font-family:monospace;font-size:0.75rem;background:var(--surface-muted);padding:0.5rem;border-radius:0.4rem;margin-top:0.25rem;">${escapeHtml(configText)}</pre>
+      `;
+
+      const copyBtn = div.querySelector(".copyConfigBtn");
+      const qrBtn = div.querySelector(".qrConfigBtn");
+      const downloadBtn = div.querySelector(".downloadConfigBtn");
+
+      copyBtn.dataset.raw = cfg;
+      copyBtn.dataset.configText = configText;
+      copyBtn.addEventListener("click", (e) => {
+        copyText(e.currentTarget.dataset.configText, t("copyDone"));
+      });
+
+      qrBtn.dataset.raw = cfg;
+      qrBtn.addEventListener("click", (e) => {
+        showQR(e.currentTarget.dataset.raw, `${name} (${t("configTitle")})`, cfg);
+      });
+
+      downloadBtn.addEventListener("click", () => {
+        const blob = new Blob([configText], { type: 'text/plain' });
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = fileName;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+      });
+
+      container.appendChild(div);
+
+    } else if (isTelegram) {
+      div.innerHTML = `
+        <div class="config-meta">
+          <span class="config-name">${escapeHtml(name)}</span>
+          <div class="config-actions">
+            <button type="button" class="mini-action copyConfigBtn" aria-label="Copy"><i class="fa-regular fa-copy"></i></button>
+            <button type="button" class="mini-action qrConfigBtn" data-name="${escapeHtml(name)}" aria-label="QR"><i class="fa-solid fa-qrcode"></i></button>
+          </div>
+        </div>
+        <div class="config-link">${escapeHtml(cfg.length > 80 ? cfg.substring(0, 80)+"..." : cfg)}</div>
+      `;
+      const copyBtn = div.querySelector(".copyConfigBtn");
+      const qrBtn = div.querySelector(".qrConfigBtn");
+      copyBtn.dataset.raw = cfg;
+      qrBtn.dataset.raw = cfg;
+      copyBtn.addEventListener("click", (e) => { copyText(e.currentTarget.dataset.raw, t("copyDone")); });
+      qrBtn.addEventListener("click", (e) => { showQR(e.currentTarget.dataset.raw, `${e.currentTarget.dataset.name} (${t("configTitle")})`, e.currentTarget.dataset.raw); });
+      container.appendChild(div);
+
+    } else {
+      div.innerHTML = `
+        <div class="config-meta">
+          <span class="config-name">${escapeHtml(name)}</span>
+          <div class="config-actions">
+            <button type="button" class="mini-action copyConfigBtn" aria-label="Copy"><i class="fa-regular fa-copy"></i></button>
+            <button type="button" class="mini-action qrConfigBtn" data-name="${escapeHtml(name)}" aria-label="QR"><i class="fa-solid fa-qrcode"></i></button>
+          </div>
+        </div>
+        <div class="config-link">${escapeHtml(cfg.length > 80 ? cfg.substring(0, 80)+"..." : cfg)}</div>
+      `;
+      const copyBtn = div.querySelector(".copyConfigBtn");
+      const qrBtn = div.querySelector(".qrConfigBtn");
+      copyBtn.dataset.raw = cfg;
+      qrBtn.dataset.raw = cfg;
+      copyBtn.addEventListener("click", (e) => { copyText(e.currentTarget.dataset.raw, t("copyDone")); });
+      qrBtn.addEventListener("click", (e) => { showQR(e.currentTarget.dataset.raw, `${e.currentTarget.dataset.name} (${t("configTitle")})`, e.currentTarget.dataset.raw); });
+      container.appendChild(div);
+    }
+  });
+}
+
+function buildConfigItemFallback(cfg, name) {
+  return `
+    <div class="config-meta">
+      <span class="config-name">${escapeHtml(name)}</span>
+      <div class="config-actions">
+        <button type="button" class="mini-action copyConfigBtn" aria-label="Copy"><i class="fa-regular fa-copy"></i></button>
+        <button type="button" class="mini-action qrConfigBtn" data-name="${escapeHtml(name)}" aria-label="QR"><i class="fa-solid fa-qrcode"></i></button>
+      </div>
+    </div>
+    <div class="config-link">${escapeHtml(cfg.length > 80 ? cfg.substring(0, 80)+"..." : cfg)}</div>
+  `;
+}
+
+function renderApps() {
+  let apps = [
+    { name: "Android", icon: "fa-brands fa-android", list: [{ n: "v2rayNG", url: "https://github.com/2dust/v2rayNG/releases" }, { n: "Happ", url: "https://play.google.com/store/apps/details?id=com.happproxy&pcampaignid=web_share" }] },
+    { name: "iOS", icon: "fa-brands fa-apple", list: [{ n: "Streisand", url: "https://apps.apple.com/us/app/streisand/id6450534064" }, { n: "Shadowrocket", url: "https://apps.apple.com/search?term=shadowrocket" }] },
+    { name: "Windows", icon: "fa-brands fa-windows", list: [{ n: "v2rayN", url: "https://github.com/2dust/v2rayN/releases" }, { n: "Nekoray", url: "https://github.com/MatsuriDayo/nekoray" }] },
+    { name: "macOS", icon: "fa-brands fa-apple", list: [{ n: "V2rayU", url: "https://github.com/yanue/V2rayU" }, { n: "Happ", url: "https://happ.app/" }] }
+  ];
+  let grid = document.getElementById("appsGridContainer");
+  grid.innerHTML = "";
+  apps.forEach(os => {
+    let card = document.createElement("div"); card.className = "app-card";
+    card.innerHTML = `<button type="button" class="app-toggle" aria-expanded="false"><span class="app-title"><i class="${os.icon}"></i><span>${os.name}</span></span><i class="fa-solid fa-chevron-down chev"></i></button><div class="app-links"></div>`;
+    let linksDiv = card.querySelector(".app-links");
+    os.list.forEach(app => { let a = document.createElement("a"); a.href = app.url; a.target="_blank"; a.rel="noopener"; a.className="app-link"; a.innerHTML = `<span>${app.n}</span> <i class="fa-solid fa-arrow-up-right-from-square"></i>`; linksDiv.appendChild(a); });
+    const toggle = card.querySelector(".app-toggle");
+    toggle.addEventListener("click", () => {
+      const openCard = grid.querySelector(".app-card.open");
+      if (openCard && openCard !== card) {
+        openCard.classList.remove("open");
+        openCard.querySelector(".app-toggle")?.setAttribute("aria-expanded", "false");
+      }
+      const isOpen = card.classList.toggle("open");
+      toggle.setAttribute("aria-expanded", String(isOpen));
+    });
+    grid.appendChild(card);
+  });
+}
+
+function getPanelTitle() { return normalize(templateVars.subTitle, "") || "VPNCENTERS"; }
+
+function checkNotificationStatus() {
+  const btn = document.getElementById('notifRequestBtn');
+  if (!btn) return;
+  if (Notification.permission === 'granted') {
+    btn.style.display = 'none';
+    return;
+  }
+  if (Notification.permission === 'default' && !window.matchMedia('(display-mode: standalone)').matches && !window.navigator.standalone) {
+    requestNotificationPermission(true).then(granted => {
+      if (granted) checkForNewNews();
+      btn.style.display = granted ? 'none' : 'inline-flex';
+    });
+    return;
+  }
+  btn.style.display = 'inline-flex';
+  if (Notification.permission === 'denied') {
+    btn.title = isPersianUI() ? 'فعال‌سازی اعلان (از تنظیمات)' : 'Enable notifications (via settings)';
+  }
+}
+
+function updateUI() {
+  document.documentElement.setAttribute("data-theme", isDark ? "dark" : "light");
+  document.documentElement.lang = currentLang === "fa" ? "fa" : "en";
+  document.documentElement.dir = currentLang === "fa" ? "rtl" : "ltr";
+  localStorage.setItem("nexus_theme", isDark ? "dark" : "light");
+  localStorage.setItem("nexus_lang", currentLang);
+  document.documentElement.style.backgroundColor = isDark ? "#161a22" : "#f6f8fb";
+  document.querySelector('meta[name="theme-color"]').setAttribute("content", isDark ? "#161a22" : "#f6f8fb");
+  document.getElementById("themeIcon").className = isDark ? "fa-solid fa-sun" : "fa-solid fa-moon";
+
+  document.title = getPanelTitle();
+  document.getElementById("panelTitle").innerText = getPanelTitle();
+
+  const brandMark = document.querySelector(".brand-mark");
+  if (brandMark) {
+    brandMark.style.background = `url("data:image/svg+xml,${encodeURIComponent(PWA_ICON_SVG)}") center/cover no-repeat`;
+    brandMark.innerHTML = "";
+  }
+
+  document.getElementById("premiumTagText").innerText = t("premium");
+  document.getElementById("homeStatusLabel").innerText = t("status");
+  document.getElementById("homeRemainLabel").innerText = t("remainDays");
+  document.getElementById("homeVolumeLabel").innerText = t("remainVol");
+  document.getElementById("copyMainText").innerText = t("copy");
+  document.getElementById("qrMainText").innerText = t("qr");
+
+  document.getElementById("usedStatLabel").innerText = t("used");
+  document.querySelectorAll(".stat-unit").forEach(el => { el.innerText = volumeUnit(); });
+  document.getElementById("totalStatLabel").innerText = t("total");
+  document.getElementById("remainStatLabel").innerText = t("remain");
+  document.getElementById("expiryStatLabel").innerText = t("expiry");
+  document.getElementById("daysLabel").innerText = t("days");
+  document.getElementById("hoursLabel").innerText = t("hours");
+  document.getElementById("minutesLabel").innerText = t("minutes");
+  document.getElementById("ringUsageLabel").innerText = t("usage");
+  document.getElementById("chartHeadLabel").innerText = t("chartTitle");
+  document.getElementById("configsTitle").innerText = t("configTitle");
+  document.getElementById("appsTitleApp").innerText = t("appsTitle");
+  document.getElementById("copyAllText").innerText = t("copyAll");
+  document.getElementById("copyAllConfigsBtn").setAttribute("title", t("copyAll"));
+
+  document.querySelector('[data-label="home"]').innerText = t("navHome");
+  document.querySelector('[data-label="status"]').innerText = t("navStatus");
+  document.querySelector('[data-label="config"]').innerText = t("navConfig");
+  document.querySelector('[data-label="application"]').innerText = t("navApps");
+  const _svcLabel = document.querySelector('[data-label="services"]');
+  if (_svcLabel) _svcLabel.innerText = t("navServices");
+
+  if (emailsList && emailsList.length > 0) {
+    document.getElementById("userEmailBadge").innerHTML = `<i class="fa-regular fa-user"></i> ${escapeHtml(emailsList[0])}`;
+  } else {
+    document.getElementById("userEmailBadge").innerHTML = "";
+  }
+
+  initLiquidBubble();
+  renderStatsAndRing();
+  renderExpiryCountdown();
+  renderConfigs();
+  renderApps();
+  initServicesTab();
+  renderHome();
+  forcePersianDigitsInTextNodes();
+  // پوزیشن اولیه Pill بدون انیمیشن (بعد از رندر کامل DOM)
+  requestAnimationFrame(() => updateDockPill(true));
+}
+
+function forcePersianDigitsInTextNodes(root = document.body) {
+  if (!isPersianUI() || !root) return;
+  const skipTags = new Set(["SCRIPT", "STYLE", "TEXTAREA", "INPUT", "CODE", "PRE"]);
+  const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
+    acceptNode(node) {
+      const parent = node.parentElement;
+      if (!parent || skipTags.has(parent.tagName)) return NodeFilter.FILTER_REJECT;
+      if (parent.closest && parent.closest(".config-link, #qrModalText, .hero-email, #userEmailBadge")) return NodeFilter.FILTER_REJECT;
+      return /\d/.test(node.nodeValue) ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_SKIP;
+    }
+  });
+  const nodes = [];
+  while (walker.nextNode()) nodes.push(walker.currentNode);
+  nodes.forEach(node => { node.nodeValue = toFaDigits(node.nodeValue); });
+}
+
+// ======================== DOCK SLIDING PILL ========================
+function updateDockPill(immediate = false) {
+  const dock = document.getElementById("dock");
+  if (!dock) return;
+
+  let pill = dock.querySelector(".dock-pill");
+  if (!pill) {
+    pill = document.createElement("div");
+    pill.className = "dock-pill";
+    dock.insertBefore(pill, dock.firstChild);
+  }
+
+  const active = dock.querySelector(".dock-item.active");
+  if (!active) {
+    pill.style.opacity = "0";
+    return;
+  }
+
+  // پاک کردن انیمیشن برای پوزیشن‌دهی فوری (لود اول / ریسایز / تغییر زبان)
+  if (immediate) dock.classList.remove("dock-ready");
+
+  const dockRect = dock.getBoundingClientRect();
+  const itemRect = active.getBoundingClientRect();
+  const cs = getComputedStyle(dock);
+  const bl = parseFloat(cs.borderLeftWidth) || 0;
+  const bt = parseFloat(cs.borderTopWidth)  || 0;
+
+  const x = itemRect.left - dockRect.left - bl;
+  const y = itemRect.top  - dockRect.top  - bt;
+
+  pill.style.transform = `translate(${x}px, ${y}px)`;
+  pill.style.width     = itemRect.width  + "px";
+  pill.style.height    = itemRect.height + "px";
+  pill.style.opacity   = "1";
+
+  if (immediate) {
+    void dock.offsetWidth; // force reflow
+    requestAnimationFrame(() => dock.classList.add("dock-ready"));
+  }
+}
+
+// ======================== VIEW NAVIGATION ========================
+function switchView(target) {
+  document.querySelectorAll(".view").forEach(v => v.classList.toggle("active", v.dataset.view === target));
+  document.querySelectorAll(".dock-item").forEach(d => d.classList.toggle("active", d.dataset.target === target));
+
+  // Pill رو با انیمیشن به دکمه فعال جدید منتقل کن
+  updateDockPill(false);
+
+  if (target === "status") requestAnimationFrame(drawInteractiveSparkline);
+  if (target === "home") requestAnimationFrame(() => { resizeLiquidCanvas(); });
+  if (target === "services") requestAnimationFrame(renderServices);
+  if (isPersianUI()) forcePersianDigitsInTextNodes();
+}
+document.querySelectorAll(".dock-item").forEach(item => {
+  item.addEventListener("click", () => switchView(item.dataset.target));
+});
+
+// ======================== EVENT LISTENERS ========================
+document.getElementById("copyMainBtn").addEventListener("click", () => copyText(subLink, t("copyDone")));
+document.getElementById("qrMainBtn").addEventListener("click", () => { if(subLink) showQR(subLink, t("qr"), subLink); else showToast(t("copyFail")); });
+document.getElementById("themeToggleBtn").addEventListener("click", () => { isDark = !isDark; updateUI(); });
+document.getElementById("langToggleBtn").addEventListener("click", () => { currentLang = currentLang === "fa" ? "en" : "fa"; updateUI(); });
+document.getElementById("closeModalBtn").addEventListener("click", closeModal);
+document.getElementById("qrModal").addEventListener("click", (e) => { if(e.target === document.getElementById("qrModal")) closeModal(); });
+document.addEventListener("keydown", (e) => { if(e.key === "Escape") closeModal(); });
+document.getElementById("copyAllConfigsBtn").addEventListener("click", () => {
+  if (!configsList || configsList.length === 0) { showToast(t("noConfigToCopy")); return; }
+  copyText(configsList.join("\n"), t("copyDone"));
+});
+document.getElementById('newsBtn').addEventListener('click', showNewsModal);
+document.getElementById('closeNewsBtn').addEventListener('click', closeNewsModal);
+document.getElementById('newsModal').addEventListener('click', (e) => {
+  if (e.target === document.getElementById('newsModal')) closeNewsModal();
+});
+document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeNewsModal(); });
+
+// دکمه درخواست اعلان (برای iOS و موارد خاص)
+document.getElementById('notifRequestBtn')?.addEventListener('click', async function() {
+  const granted = await requestNotificationPermission(true);
+  if (granted) {
+    this.style.display = 'none';
+    checkForNewNews();
+  } else {
+    if (Notification.permission === 'denied') {
+      showToast(isPersianUI() ? 'لطفاً دسترسی اعلان را در تنظیمات مرورگر فعال کنید.' : 'Please enable notification permission in browser settings.');
+    }
+  }
+});
+
+// ======================== VIEWPORT & PWA ========================
+function handleViewportChange() {
+  requestAnimationFrame(() => {
+    if (window.visualViewport) {
+      document.documentElement.style.setProperty('--real-vh', window.visualViewport.height + 'px');
+    }
+    resizeLiquidCanvas();
+    drawInteractiveSparkline();
+    updateDockPill(true); // هماهنگی Pill با اندازه جدید
+  });
+}
+window.addEventListener("resize", handleViewportChange);
+window.addEventListener("orientationchange", handleViewportChange);
+window.visualViewport?.addEventListener("resize", handleViewportChange);
+
+function updatePwaMode() {
+  const isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+  document.body.classList.toggle('pwa-mode', isStandalone);
+  handleViewportChange();
+
+  if (isStandalone) {
+    checkNotificationStatus();
+  }
+}
+(function initRealVh() {
+  const h = window.visualViewport ? window.visualViewport.height : window.innerHeight;
+  document.documentElement.style.setProperty('--real-vh', h + 'px');
+})();
+window.visualViewport && window.visualViewport.addEventListener('resize', () => {
+  document.documentElement.style.setProperty('--real-vh', window.visualViewport.height + 'px');
+});
+updatePwaMode();
+window.matchMedia('(display-mode: standalone)').addEventListener?.('change', updatePwaMode);
+
+// ======================== PWA INSTALL ========================
+let deferredPrompt = null;
+const installBtn = document.getElementById("installBtn");
+installBtn.addEventListener("click", async () => {
+  if (!deferredPrompt) return;
+  deferredPrompt.prompt();
+  const choiceResult = await deferredPrompt.userChoice;
+  if (choiceResult.outcome === "accepted") {
+    showToast(t("installAccepted") || "Installed");
+  }
+  deferredPrompt = null;
+  installBtn.style.display = "none";
+});
+window.addEventListener("beforeinstallprompt", (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  installBtn.style.display = "inline-grid";
+});
+
+// ======================== PWA MANIFEST SETUP ========================
+(function setupPWA() {
+  try {
+    const iconUrl = `data:image/svg+xml,${encodeURIComponent(PWA_ICON_SVG)}`;
+    const iconType = "image/svg+xml";
+    const manifest = {
+      name: getPanelTitle(),
+      short_name: getPanelTitle(),
+      start_url: ".",
+      scope: ".",
+      display: "standalone",
+      orientation: "portrait",
+      background_color: "#0e1116",
+      theme_color: "#0e1116",
+      icons: [
+        { src: iconUrl, sizes: "192x192", type: iconType, purpose: "any maskable" },
+        { src: iconUrl, sizes: "512x512", type: iconType, purpose: "any maskable" }
+      ]
+    };
+    const blob = new Blob([JSON.stringify(manifest)], { type: "application/manifest+json" });
+    const link = document.createElement("link");
+    link.rel = "manifest";
+    link.href = URL.createObjectURL(blob);
+    document.head.appendChild(link);
+
+    const appleIcon = document.createElement("link");
+    appleIcon.rel = "apple-touch-icon";
+    appleIcon.href = iconUrl;
+    document.head.appendChild(appleIcon);
+
+    if ("serviceWorker" in navigator) {
+      const swCode = `
+        self.addEventListener("install", e => self.skipWaiting());
+        self.addEventListener("activate", e => self.clients.claim());
+        self.addEventListener("fetch", e => {
+          e.respondWith(fetch(e.request).catch(() => caches.match(e.request)));
+        });
+      `;
+      const swBlob = new Blob([swCode], { type: "text/javascript" });
+      navigator.serviceWorker.register(URL.createObjectURL(swBlob)).catch(() => {});
+    }
+  } catch (e) { /* best-effort */ }
+})();
+
+// ======================== SERVICES TAB ========================
+function formatPrice(price) {
+  const str = Math.round(price).toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  return isPersianUI() ? toFaDigits(str).replace(/,/g, "٬") : str;
+}
+
+function renderServices() {
+  const grid = document.getElementById("servicesGrid");
+  if (!grid) return;
+  grid.innerHTML = "";
+  SERVICES_PACKAGES.forEach(pkg => {
+    const card = document.createElement("div");
+    card.className = "pkg-card";
+    const priceStr = formatPrice(pkg.price);
+    const daysStr = formatDisplay(pkg.days);
+    const periodLabel = isPersianUI() ? `${daysStr} روز` : `${daysStr} days`;
+    const currencyLabel = isPersianUI() ? "تومان" : "Toman";
+    card.innerHTML = `
+      ${pkg.popular ? `<div class="pkg-popular">${isPersianUI() ? "پرفروش" : "Popular"}</div>` : ""}
+      <div class="pkg-badge"><i class="fa-solid fa-box"></i> ${escapeHtml(pkg.label)}</div>
+      <div class="pkg-volume">${escapeHtml(pkg.volume)}</div>
+      <div class="pkg-days">${periodLabel}</div>
+      <div class="pkg-divider"></div>
+      <div class="pkg-price">${priceStr}</div>
+      <div class="pkg-currency">${currencyLabel}</div>
+    `;
+    grid.appendChild(card);
+  });
+  const note = document.getElementById("servicesNote");
+  const sup = normalize(templateVars.subSupportUrl, "") || "https://t.me/master_supports";
+  if (note) note.innerHTML = isPersianUI()
+    ? `برای خرید و اطلاعات بیشتر با <a href="${escapeHtml(sup)}" target="_blank" rel="noopener">پشتیبانی @master_supports</a> تماس بگیرید.`
+    : `For plans and info, contact <a href="${escapeHtml(sup)}" target="_blank" rel="noopener">support @master_supports</a>.`;
+  const title = document.getElementById("servicesTitleEl");
+  if (title) title.innerText = t("servicesTitle");
+}
+
+function initServicesTab() {
+  const dockItem = document.getElementById("servicesDockItem");
+  const view = document.getElementById("servicesView");
+  if (!ENABLE_SERVICES_TAB) {
+    if (dockItem) dockItem.style.display = "none";
+    if (view) { view.style.display = "none"; view.classList.remove("active"); }
+    return;
+  }
+  if (dockItem) dockItem.style.display = "";
+  if (view) view.style.display = "";
+  renderServices();
+}
+
+// ======================== INSTALL POPUP ========================
+function _buildInstallStepsIOS(isSafari) {
+  if (isSafari) {
+    const fa = isPersianUI();
+    return `
+      <div class="install-step">
+        <div class="install-step-num">1</div>
+        <div class="install-step-text">${fa ? 'روی دکمه <strong>اشتراک‌گذاری</strong> در پایین سافاری بزنید' : 'Tap the <strong>Share</strong> button in Safari\'s toolbar'}</div>
+        <i class="fa-solid fa-arrow-up-from-bracket install-step-ico"></i>
+      </div>
+      <div class="install-step">
+        <div class="install-step-num">2</div>
+        <div class="install-step-text">${fa ? 'گزینه «<strong>Add to Home Screen</strong>» را انتخاب کنید' : 'Select <strong>Add to Home Screen</strong>'}</div>
+        <i class="fa-regular fa-square-plus install-step-ico"></i>
+      </div>
+      <div class="install-step">
+        <div class="install-step-num">3</div>
+        <div class="install-step-text">${fa ? 'روی «<strong>Add</strong>» بزنید تا اپ اضافه شود' : 'Tap <strong>Add</strong> to confirm'}</div>
+        <i class="fa-solid fa-check install-step-ico"></i>
+      </div>`;
+  }
+  const fa = isPersianUI();
+  return `
+    <div class="install-step">
+      <div class="install-step-num"><i class="fa-brands fa-safari" style="font-size:.85rem"></i></div>
+      <div class="install-step-text">${fa ? 'این صفحه را در <strong>Safari</strong> باز کنید تا بتوانید اپ را نصب کنید' : 'Open this page in <strong>Safari</strong> to install the app'}</div>
+      <i class="fa-solid fa-chevron-left install-step-ico"></i>
+    </div>`;
+}
+
+function _buildInstallStepsAndroid(hasPrompt) {
+  const fa = isPersianUI();
+  let steps = `
+    <div class="install-step">
+      <div class="install-step-num">1</div>
+      <div class="install-step-text">${fa ? 'روی دکمه <strong>نصب</strong> بزنید تا اپ روی گوشی نصب شود' : 'Tap <strong>Install</strong> to add the app to your phone'}</div>
+      <i class="fa-solid fa-download install-step-ico"></i>
+    </div>
+    <div class="install-step">
+      <div class="install-step-num">2</div>
+      <div class="install-step-text">${fa ? 'سریع‌تر و بدون مرورگر دسترسی داشته باشید' : 'Access it faster without opening a browser'}</div>
+      <i class="fa-solid fa-bolt install-step-ico"></i>
+    </div>`;
+  if (!hasPrompt) {
+    steps += `
+    <div class="install-step">
+      <div class="install-step-num">3</div>
+      <div class="install-step-text">${fa ? 'منوی مرورگر ⋮ → «<strong>Add to Home screen</strong>» را انتخاب کنید' : 'Browser menu ⋮ → <strong>Add to Home screen</strong>'}</div>
+      <i class="fa-solid fa-ellipsis-vertical install-step-ico"></i>
+    </div>`;
+  }
+  return steps;
+}
+
+function closeInstallPopup(remember) {
+  const overlay = document.getElementById("installOverlay");
+  if (overlay) overlay.classList.remove("visible");
+  if (remember) localStorage.setItem("nexus_pwa_dismissed", "1");
+}
+
+function initInstallPopup() {
+  if (!ENABLE_INSTALL_POPUP) return;
+  const overlay = document.getElementById("installOverlay");
+  if (!overlay) return;
+  if (window.matchMedia("(display-mode: standalone)").matches || window.navigator.standalone === true) return;
+  if (localStorage.getItem("nexus_pwa_dismissed")) return;
+  const ua = navigator.userAgent || "";
+  const isIOS = /iPhone|iPad|iPod/i.test(ua) && !window.MSStream;
+  const isAndroid = /Android/i.test(ua);
+  if (!isIOS && !isAndroid) return;
+
+  const appName = getPanelTitle();
+  const nameEl = document.getElementById("installAppName");
+  const subEl = document.getElementById("installAppSub");
+  const stepsEl = document.getElementById("installSteps");
+  const actionBtn = document.getElementById("installActionBtn");
+  if (nameEl) nameEl.innerText = appName;
+
+  if (isIOS) {
+    const isSafari = /Safari/i.test(ua) && !/CriOS|FxiOS|EdgiOS/i.test(ua);
+    if (subEl) subEl.innerText = isPersianUI() ? "به صفحه اصلی اضافه کنید" : "Add to Home Screen";
+    if (stepsEl) stepsEl.innerHTML = _buildInstallStepsIOS(isSafari);
+    if (actionBtn) actionBtn.style.display = "none";
+  } else {
+    if (subEl) subEl.innerText = isPersianUI() ? "به عنوان اپلیکیشن نصب کنید" : "Install as an app";
+    const hasPrompt = !!deferredPrompt;
+    if (stepsEl) stepsEl.innerHTML = _buildInstallStepsAndroid(hasPrompt);
+    if (hasPrompt && actionBtn) {
+      actionBtn.style.display = "";
+      actionBtn.onclick = async () => {
+        closeInstallPopup(false);
+        deferredPrompt.prompt();
+        const { outcome } = await deferredPrompt.userChoice;
+        if (outcome === "accepted") showToast(isPersianUI() ? "اپ نصب شد!" : "App installed!");
+        deferredPrompt = null;
+      };
+    }
+  }
+
+  const showOverlay = () => {
+    overlay.classList.add("visible");
+    if (isAndroid && !deferredPrompt) {
+      const btn = document.getElementById("installActionBtn");
+      if (btn && deferredPrompt) btn.style.display = "";
+    }
+  };
+  setTimeout(showOverlay, 1800);
+
+  document.getElementById("installLaterBtn").addEventListener("click", () => closeInstallPopup(true));
+  overlay.addEventListener("click", (e) => { if (e.target === overlay) closeInstallPopup(true); });
+  document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeInstallPopup(true); });
+}
+
+// ======================== DISABLE ZOOM ========================
+(function disableZoom() {
+  document.addEventListener('gesturestart', function(e) { e.preventDefault(); });
+  document.addEventListener('gesturechange', function(e) { e.preventDefault(); });
+  document.addEventListener('gestureend', function(e) { e.preventDefault(); });
+  let lastTouchEnd = 0;
+  document.addEventListener('touchend', function(e) {
+    const now = Date.now();
+    if (now - lastTouchEnd <= 300) e.preventDefault();
+    lastTouchEnd = now;
+  }, { passive: false });
+  document.addEventListener('touchmove', function(e) {
+    if (e.touches.length > 1) e.preventDefault();
+  }, { passive: false });
+  document.addEventListener('keydown', function(e) {
+    if (e.ctrlKey && (e.key === '+' || e.key === '-' || e.key === '0')) e.preventDefault();
+  });
+})();
+
+// ======================== INIT ========================
+updateUI();
+initInstallPopup();
+
+// درخواست اعلان اولیه برای اندروید و مرورگرهای دسکتاپ
+requestNotificationPermission(false).then(permitted => {
+  if (permitted) {
+    checkForNewNews();
+  }
+  checkNotificationStatus();
+});
+
+// شروع چک دوره‌ای اخبار (هر ۶۰ ثانیه)
+startPeriodicNewsCheck(60000);
+
+setInterval(() => { if (isPersianUI()) forcePersianDigitsInTextNodes(); }, 1000);</script>
+            
+        
+    </body>
